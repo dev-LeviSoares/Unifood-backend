@@ -1,0 +1,38 @@
+{
+  "name": "unifood-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-LeviSoares/Unifood-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/dev-LeviSoares/Unifood-backend/issues"
+  },
+  "homepage": "https://github.com/dev-LeviSoares/Unifood-backend#readme",
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "prisma": "^8.0.0-rc.15",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "fastify": "^5.12.5",
+    "zod": "^4.6.5"
+  }
+}
