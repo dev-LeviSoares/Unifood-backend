@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  SELLER
+  MANAGER
+}
+
+enum Status {
+  PENDING
+  ACTIVE
+  REJECTED
+  BLOCKED
+  DEACTIVATED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  CONCLUDED
+  CANCELLED
+}
+
+model User {
+  id           String  @id @default(uuid()) @db.Uuid
+  username     String  @unique @db.VarChar(100)
+  fullName     String  @db.VarChar(100)
+  passwordHash String
+  cpf          String? @unique
+
+  telephone String   @db.VarChar(20)
+  birthDate DateTime @db.Date
+
+  companyName String? @db.VarChar(150)
+  status      Status  @default(PENDING)
+  avatarUrl   String? @db.Text
+  role        Role
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products        Product[]
+  ordersAsStudent Order[]   @relation("StudentOrders")
+  ordersAsSeller  Order[]   @relation("SellerOrders")
+
+  @@map("users")
+}
+
+model Product {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+
+  price     Decimal @db.Decimal(10, 2)
+  stock     Int     @default(0)
+  available Boolean @default(true)
+
+  imageUrl String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sellerId String @db.Uuid
+  seller   User   @relation(fields: [sellerId], references: [id])
+
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id         String      @id @default(uuid()) @db.Uuid
+  totalValue Decimal     @db.Decimal(10, 2)
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  studentId String @db.Uuid
+  student   User   @relation("StudentOrders", fields: [studentId], references: [id])
+
+  sellerId String @db.Uuid
+  seller   User   @relation("SellerOrders", fields: [sellerId], references: [id])
+
+  items OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id       String  @id @default(uuid()) @db.Uuid
+  quantity Int
+  price    Decimal @db.Decimal(10, 2)
+
+  orderId String @db.Uuid
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
