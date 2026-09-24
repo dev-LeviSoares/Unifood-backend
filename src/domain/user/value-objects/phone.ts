@@ -1,4 +1,4 @@
-import { InvalidPhoneError } from "../errors/invalid-phone.error.js";
+import { InvalidPhoneError } from "../errors/invalid-phone-error.js";
 
 export class Phone {
   private readonly value: string;

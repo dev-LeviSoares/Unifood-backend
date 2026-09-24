@@ -114,10 +114,101 @@ export class User {
     })
   }
 
+  // Change of Status
+
+  approve(): void {
+    this.assertRole(Role.SELLER);
+    this.assertStatus(AccountStatus.PENDING, "aprovar");
+    this.props.status = AccountStatus.ACTIVE;
+    this.touch();
+  }
+
+  reject(): void {
+    this.assertRole(Role.SELLER);
+    this.assertStatus(AccountStatus.PENDING, "rejeitar");
+    this.props.status = AccountStatus.REJECTED;
+    this.touch();
+  }
+  
+  block(): void {
+    this.assertRole(Role.SELLER, Role.MANAGER, Role.STUDENT);
+    this.assertStatus(AccountStatus.ACTIVE, "bloquear");
+    this.props.status = AccountStatus.BLOCKED;
+    this.touch();
+  }
+  
+  reactivate(): void {
+    this.assertRole(Role.SELLER, Role.MANAGER, Role.STUDENT);
+    this.assertStatus(AccountStatus.BLOCKED, "reativar");
+    this.props.status = AccountStatus.ACTIVE;
+    this.touch();
+  }
+  
+  canSell(): boolean {
+    return (
+      this.props.role === Role.SELLER &&
+      this.props.status === AccountStatus.ACTIVE
+    );
+  }
+
+  // Getters
+
+  get id(): string {
+    return this.props.id;
+  }
+
+  get fullName(): FullName {
+    return this.props.fullName;
+  }
+
+  get username(): Username {
+    return this.props.username;
+  }
+
+  get passwordHash(): string {
+    return this.props.passwordHash;
+  }
+  
+  get phone(): Phone {
+    return this.props.phone;
+  }
+  
+  get birthDate(): BirthDate {
+    return this.props.birthDate;
+  }
+  
+  get role(): Role {
+    return this.props.role;
+  }
+  
+  get status(): AccountStatus {
+    return this.props.status;
+  }
+  
+  get cpf(): Cpf | null {
+    return this.props.cpf;
+  }
+  
+  get companyName(): CompanyName | null {
+    return this.props.companyName;
+  }
+  
+  get photo(): Photo | null {
+    return this.props.photo;
+  }
+  
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+  
+  get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
+
+
   static restore(props: UserProps): User {
     return new User(props);
   }
-
 
   private static ensurePasswordHash(passwordHash: string): string {
     if (passwordHash.trim().length === 0) {
@@ -126,5 +217,24 @@ export class User {
     return passwordHash;
   }
 
+  private assertRole(...roles: Role[]): void {
+    if (!roles.includes(this.props.role)) {
+      throw new InvalidUserOperationError(
+        "Este perfil não permite essa mudança de status.",
+      );
+    }
+  }
+
+  private assertStatus(expected: AccountStatus, action: string): void {
+    if (this.props.status !== expected) {
+      throw new InvalidUserOperationError(
+        `Não é possível ${action} um usuário com status ${this.props.status}.`,
+      );
+    }
+  }
+
+  private touch(): void {
+    this.props.updatedAt = new Date();
+  }
 }
 
