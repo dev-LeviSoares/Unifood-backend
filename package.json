@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "tsc src/main.ts",
     "start": "node dist/main.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
