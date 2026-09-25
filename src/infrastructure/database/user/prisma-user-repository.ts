@@ -34,7 +34,7 @@ export class PrismaUsersRepository implements UsersRepository{
     await this.prisma.user.create({
       data: {
         id: user.id,
-        username: user.username.getValue(),
+        username: user.username.getValue,
         firstName: user.fullName.firstName,
         lastName: user.fullName.lastName,
         passwordHash: user.passwordHash,

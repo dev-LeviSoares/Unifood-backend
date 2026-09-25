@@ -6,7 +6,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 
   async findByUsername(username: string): Promise<User | null> {
     const user = this.items.find(
-      (item) => item.username.getValue() === username,
+      (item) => item.username.getValue === username,
     );
 
     return user ?? null;

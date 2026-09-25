@@ -19,7 +19,7 @@ export class Username {
     }
   }
 
-  public getValue(): string {
+  public get getValue(): string {
     return this.value;
   }
 

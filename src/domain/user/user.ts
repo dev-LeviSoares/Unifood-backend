@@ -114,8 +114,6 @@ export class User {
     })
   }
 
-  // Change of Status
-
   approve(): void {
     this.assertRole(Role.SELLER);
     this.assertStatus(AccountStatus.PENDING, "aprovar");

@@ -7,7 +7,7 @@ describe("Create Username", () => {
     
     const username = new Username(value);
 
-    expect(username.getValue()).toBe("test_123");
+    expect(username.getValue).toBe("test_123");
   });
 
   test("it should not be possible to create a short username", () => {
