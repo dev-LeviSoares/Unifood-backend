@@ -1,6 +1,6 @@
 import { RegisterStudentDTO } from "@/application/dtos/user/register-student.dto.js";
 import { RegisteredUserDTO } from "@/application/dtos/user/registered-user.dto.js";
-import { PasswordHasher } from "@/application/ports/password-hasher.js";
+import { PasswordHasher } from "@/application/contracts/password-hasher.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
 import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";

@@ -1,5 +1,5 @@
-import { HttpInjectResponse, HttpServer } from "@/application/ports/http-server.js";
-import { HttpController } from "@/application/ports/http.js";
+import { HttpInjectResponse, HttpServer } from "@/application/contracts/http-server.js";
+import { HttpController } from "@/application/contracts/http.js";
 import Fastify, { type FastifyInstance } from "fastify";
 import { mapDomainError } from "./map-error.js";
 

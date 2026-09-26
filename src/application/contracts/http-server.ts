@@ -11,7 +11,9 @@ export interface HttpServer {
     path: string,
     controller: HttpController,
   ): void;
+
   listen(port: number): Promise<void>;
+  
   inject(input: {
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
     path: string;

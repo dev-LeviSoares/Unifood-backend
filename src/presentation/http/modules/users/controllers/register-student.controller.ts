@@ -2,7 +2,7 @@ import {
   HttpController,
   HttpRequest,
   HttpResponse,
-} from "@/application/ports/http.js";
+} from "@/application/contracts/http.js";
 import { RegisterStudentUseCase } from "@/application/use-cases/user/register-student.js";
 import { registerStudentSchema } from "../schemas/register-student.schema.js";
 

@@ -1,5 +1,5 @@
-import { HttpServer } from "@/application/ports/http-server.js";
-import { HttpController } from "@/application/ports/http.js";
+import { HttpServer } from "@/application/contracts/http-server.js";
+import { HttpController } from "@/application/contracts/http.js";
 
 interface UserControllers {
   registerStudent: HttpController;
