@@ -1,6 +1,6 @@
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";
 import { User } from "@/domain/user/user.js";
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client/extension.js";
 import { PrismaUserMapper } from "./prisma-user-mapper.js";
 
 export class PrismaUsersRepository implements UsersRepository{

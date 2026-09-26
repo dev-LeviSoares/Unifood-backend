@@ -20,7 +20,7 @@ type UserRow = {
   cpf: string | null;
   telephone: string;
   birthDate: Date;
-  comanyName: string | null;
+  companyName: string | null;
   status: "PENDING" | "ACTIVE" | "REJECTED" | "BLOCKED";
   avatarUrl: string | null;
   role: "STUDENT" | "SELLER" | "MANAGER";
@@ -36,11 +36,11 @@ export const PrismaUserMapper = {
       username: new Username(row.username),
       passwordHash: row.passwordHash,
       phone: new Phone(row.telephone),
-      birthDate: BirthDate.create(row.telephone),
+      birthDate: BirthDate.restore(row.birthDate),
       role: row.role as Role,
       status: row.status as AccountStatus,
       cpf: row.cpf ? new Cpf(row.cpf) : null,
-      companyName: row.comanyName ? new CompanyName(row.comanyName) : null,
+      companyName: row.companyName ? new CompanyName(row.companyName) : null,
       photo: row.avatarUrl ? Photo.create(row.avatarUrl) : null,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt

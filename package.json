@@ -9,7 +9,8 @@
     "start": "node dist/main.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "postinstall": "prisma skills sync || exit 0"
+    "test:unit": "vitest --project unit",
+    "test:e2e": "vitest --project e2e"
   },
   "repository": {
     "type": "git",
