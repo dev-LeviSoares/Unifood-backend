@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "tsc src/main.ts",
     "start": "node dist/main.js",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "test:unit": "vitest --project unit",
+    "test:e2e": "vitest --project e2e"
   },
   "repository": {
     "type": "git",
@@ -23,16 +25,23 @@
   },
   "homepage": "https://github.com/dev-LeviSoares/Unifood-backend#readme",
   "devDependencies": {
-    "@types/node": "^26.6.2",
-    "prisma": "^8.0.0-rc.15",
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "26.6.2",
+    "@types/pg": "8.23.1",
+    "prisma": "7.10.0",
+    "tsup": "8.5.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.11"
+    "vitest": "4.1.11"
   },
   "dependencies": {
-    "@prisma/client": "^7.10.0",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "bcryptjs": "3.0.3",
+    "dotenv": "18.0.3",
     "fastify": "^5.12.5",
+    "pg": "8.23.0",
     "zod": "^4.6.5"
   }
 }

@@ -6,7 +6,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=admin
-      - POSTGRESQL_PASSWORD=admin
-      - POSTGRESQL_DATABASE=unifood
-    
+      POSTGRESQL_USERNAME: ${DB_USER}
+      POSTGRESQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRESQL_DATABASE: ${DB_NAME}
