@@ -1,4 +1,4 @@
-import { HttpServer } from "@/application/ports/http-server.js";
+import { HttpInjectResponse, HttpServer } from "@/application/ports/http-server.js";
 import { HttpController } from "@/application/ports/http.js";
 import Fastify, { type FastifyInstance } from "fastify";
 import { mapDomainError } from "./map-error.js";
@@ -38,5 +38,22 @@ export class FastifyHttpServer implements HttpServer {
   async listen(port: number): Promise<void> {
     const address = await this.app.listen({ port, host: "0.0.0.0" });
     console.log(`HTTP server running on ${address}`);
+  }
+
+  async inject(input: {
+    method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    path: string;
+    payload?: Record<string, unknown>;
+  }): Promise<HttpInjectResponse> {
+    const response = await this.app.inject({
+      method: input.method,
+      url: input.path,
+      payload: input.payload,
+    });
+  
+    return {
+      status: response.statusCode,
+      body: response.json(),
+    };
   }
 }

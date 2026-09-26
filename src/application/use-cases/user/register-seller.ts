@@ -26,7 +26,7 @@ export class RegisterSellerUseCase {
     const birthDate = BirthDate.create(input.birthDate);
     const cpf = new Cpf(input.cpf);
     const companyName = new CompanyName(input.companyName);
-    const photo = Photo.create(input.photoKey);
+    const photo = input.photoKey ? Photo.create(input.photoKey) : null;
 
     if (input.password.trim().length < 8) {
       throw new InvalidUserOperationError(

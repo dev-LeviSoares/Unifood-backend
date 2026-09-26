@@ -40,7 +40,7 @@ interface RegisterStudentInput extends RegisterUserInput {}
 interface RegisterSellerInput extends RegisterUserInput {
   cpf: Cpf;
   companyName: CompanyName;
-  photo: Photo;
+  photo: Photo | null;
 }
 
 interface RegisterManagerInput extends RegisterUserInput {

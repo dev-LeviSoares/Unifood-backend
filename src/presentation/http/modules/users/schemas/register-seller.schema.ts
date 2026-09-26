@@ -9,7 +9,7 @@ export const registerSellerSchema = z.object({
   birthDate: z.string(),
   cpf: z.string(),
   companyName: z.string(),
-  photoKey: z.string(),
+  photoKey: z.string().nullish(),
 });
 
 export type RegisterSellerBody = z.infer<typeof registerSellerSchema>;

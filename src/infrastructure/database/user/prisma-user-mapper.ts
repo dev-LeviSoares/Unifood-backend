@@ -21,7 +21,7 @@ type UserRow = {
   telephone: string;
   birthDate: Date;
   companyName: string | null;
-  status: "PENDING" | "ACTIVE" | "REJECTED" | "BLOCKED";
+  status: "PENDING" | "ACTIVE" | "REJECTED" | "BLOCKED" | "DEACTIVATED";
   avatarUrl: string | null;
   role: "STUDENT" | "SELLER" | "MANAGER";
   createdAt: Date;

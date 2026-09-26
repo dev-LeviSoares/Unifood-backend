@@ -7,5 +7,5 @@ export interface RegisterSellerDTO {
   birthDate: string;
   cpf: string;
   companyName: string;
-  photoKey: string;
+  photoKey: string | null;
 }
