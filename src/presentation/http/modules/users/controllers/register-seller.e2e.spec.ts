@@ -16,16 +16,17 @@ describe("POST /auth/register/seller", () => {
         birthDate: "1999-01-01",
         cpf: "11144477735",
         companyName: "company test",
-        photoKey: "avatars/f81d4fae-7dec-11d0-a765-00a0c91e6bf6.png"
+        photoKey: "avatars/f81d4fae-7dec-11d0-a765-00a0c91e6bf6.png",
+        pixKey: "joao.pedro@email.com",
       },
     });
     
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
-      username: "joao_pedro",
-      role: "SELLER",
-      status: "PENDING"
+        username: "joao_pedro",
+        role: "SELLER",
+        status: "PENDING"
       }),
     )
   });

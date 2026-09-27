@@ -8,4 +8,5 @@ export interface RegisterSellerDTO {
   cpf: string;
   companyName: string;
   photoKey: string | null;
+  pixKey: string;
 }

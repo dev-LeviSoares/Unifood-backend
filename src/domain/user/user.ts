@@ -7,6 +7,7 @@ import { Phone } from "./value-objects/phone.js";
 import { Cpf } from "./value-objects/cpf.js";
 import { CompanyName } from "./value-objects/company-name.js";
 import { Photo } from "./value-objects/photo.js";
+import { PixKey } from "./value-objects/pix-key.js";
 import { Username } from "./value-objects/username.js";
 import { InvalidUserOperationError } from "./errors/invalid-user-operation-error.js";
 import { Role } from "./enum/role.js";
@@ -23,6 +24,7 @@ interface UserProps {
   cpf: Cpf | null
   companyName: CompanyName | null;
   photo: Photo | null;
+  pixKey: PixKey | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +43,7 @@ interface RegisterSellerInput extends RegisterUserInput {
   cpf: Cpf;
   companyName: CompanyName;
   photo: Photo | null;
+  pixKey: PixKey;
 }
 
 interface RegisterManagerInput extends RegisterUserInput {
@@ -69,6 +72,7 @@ export class User {
       cpf: null,
       companyName: null,
       photo: null,
+      pixKey: null,
       createdAt: now,
       updatedAt: now
     })
@@ -89,6 +93,7 @@ export class User {
       cpf: input.cpf,
       companyName: input.companyName,
       photo: input.photo,
+      pixKey: input.pixKey,
       createdAt: now,
       updatedAt: now,
     })
@@ -110,7 +115,8 @@ export class User {
       birthDate: input.birthDate,
       companyName: null,
       phone: input.phone,
-      photo: null
+      photo: null,
+      pixKey: null,
     })
   }
 
@@ -193,6 +199,10 @@ export class User {
   
   get photo(): Photo | null {
     return this.props.photo;
+  }
+
+  get pixKey(): PixKey | null {
+    return this.props.pixKey;
   }
   
   get createdAt(): Date {

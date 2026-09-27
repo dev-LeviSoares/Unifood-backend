@@ -9,6 +9,7 @@ import { Cpf } from "@/domain/user/value-objects/cpf.js";
 import { FullName } from "@/domain/user/value-objects/full-name.js";
 import { Phone } from "@/domain/user/value-objects/phone.js";
 import { Photo } from "@/domain/user/value-objects/photo.js";
+import { PixKey } from "@/domain/user/value-objects/pix-key.js";
 import { Username } from "@/domain/user/value-objects/username.js";
 
 type UserRow = {
@@ -21,6 +22,7 @@ type UserRow = {
   telephone: string;
   birthDate: Date;
   companyName: string | null;
+  pixKey: string | null;
   status: "PENDING" | "ACTIVE" | "REJECTED" | "BLOCKED" | "DEACTIVATED";
   avatarUrl: string | null;
   role: "STUDENT" | "SELLER" | "MANAGER";
@@ -42,6 +44,7 @@ export const PrismaUserMapper = {
       cpf: row.cpf ? new Cpf(row.cpf) : null,
       companyName: row.companyName ? new CompanyName(row.companyName) : null,
       photo: row.avatarUrl ? Photo.create(row.avatarUrl) : null,
+      pixKey: row.pixKey ? new PixKey(row.pixKey) : null,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt
     });

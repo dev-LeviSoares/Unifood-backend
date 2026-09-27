@@ -2,6 +2,7 @@ import { RegisterSellerDTO } from "@/application/dtos/user/register-seller.dto.j
 import { RegisteredUserDTO } from "@/application/dtos/user/registered-user.dto.js";
 import { PasswordHasher } from "@/application/contracts/password-hasher.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
+import { PixKeyAlreadyTakenError } from "@/domain/user/errors/pix-key-already-taken-error.js";
 import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";
 import { User } from "@/domain/user/user.js";
@@ -11,6 +12,7 @@ import { Cpf } from "@/domain/user/value-objects/cpf.js";
 import { FullName } from "@/domain/user/value-objects/full-name.js";
 import { Phone } from "@/domain/user/value-objects/phone.js";
 import { Photo } from "@/domain/user/value-objects/photo.js";
+import { PixKey } from "@/domain/user/value-objects/pix-key.js";
 import { Username } from "@/domain/user/value-objects/username.js";
 
 export class RegisterSellerUseCase {
@@ -27,6 +29,7 @@ export class RegisterSellerUseCase {
     const cpf = new Cpf(input.cpf);
     const companyName = new CompanyName(input.companyName);
     const photo = input.photoKey ? Photo.create(input.photoKey) : null;
+    const pixKey = new PixKey(input.pixKey);
 
     if (input.password.trim().length < 8) {
       throw new InvalidUserOperationError(
@@ -42,6 +45,10 @@ export class RegisterSellerUseCase {
       throw new UsernameAlreadyTakenError(username.getValue);
     }
 
+    if (await this.usersRepository.findByPixKey(pixKey.sanitize())) {
+      throw new PixKeyAlreadyTakenError(pixKey.format());
+    }
+
     const passwordHash = await this.passwordHasher.hash(input.password);
     const user = User.registerSeller({
       fullName,
@@ -52,6 +59,7 @@ export class RegisterSellerUseCase {
       cpf,
       companyName,
       photo,
+      pixKey,
     });
 
     await this.usersRepository.create(user);

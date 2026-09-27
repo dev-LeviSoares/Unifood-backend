@@ -4,6 +4,12 @@ import type { User } from "@/domain/user/user.js";
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = [];
 
+  async findById(id: string): Promise<User | null> {
+    const user = this.items.find((item) => item.id === id);
+
+    return user ?? null;
+  }
+
   async findByUsername(username: string): Promise<User | null> {
     const user = this.items.find(
       (item) => item.username.getValue === username,
@@ -14,6 +20,12 @@ export class InMemoryUsersRepository implements UsersRepository {
 
   async findByCpf(cpf: string): Promise<User | null> {
     const user = this.items.find((item) => item.cpf?.value === cpf);
+
+    return user ?? null;
+  }
+
+  async findByPixKey(pixKey: string): Promise<User | null> {
+    const user = this.items.find((item) => item.pixKey?.sanitize() === pixKey);
 
     return user ?? null;
   }

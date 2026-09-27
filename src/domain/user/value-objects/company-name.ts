@@ -25,13 +25,13 @@ export class CompanyName {
   }
 
   // Retorna o valor bruto
-  getValue(): string {
+  public get getValue(): string {
     return this.value;
   }
 
   // Garante a imutabilidade ao comparar a igualdade por valor, não por referência
   equals(other: CompanyName): boolean {
     if (!(other instanceof CompanyName)) return false;
-    return this.value === other.getValue();
+    return this.value === other.getValue;
   }
 }

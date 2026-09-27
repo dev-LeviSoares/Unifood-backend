@@ -6,7 +6,7 @@ describe("Create Company Name", () => {
     const name = "Unifood";
     const validate = new CompanyName(name);
 
-    expect(validate.getValue()).toBe("Unifood");
+    expect(validate.getValue).toBe("Unifood");
   });
 
   test("It should not be possible to create a short company name", () => {

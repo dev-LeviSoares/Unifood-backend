@@ -17,15 +17,13 @@ describe("POST /auth/register/student", () => {
       },
     });
 
-    console.log(response)
-
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
-      username: "joao_pedro",
-      role: "STUDENT",
-      status: "ACTIVE"
+        username: "joao_pedro",
+        role: "STUDENT",
+        status: "ACTIVE"
       }),
     )
   });
-})
+}) 
