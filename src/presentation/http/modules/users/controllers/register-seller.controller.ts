@@ -32,7 +32,7 @@ export class RegisterSellerController implements HttpController {
       cpf: parsed.data.cpf,
       companyName: parsed.data.companyName,
       photoKey: parsed.data.photoKey ?? null,
-      pixKey: parsed.data.pixKey,
+      pixKey: parsed.data.pixKey || null,
     });
 
     return { 

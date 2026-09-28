@@ -1,6 +1,5 @@
 import { InMemoryUsersRepository } from "@/infrastructure/database/user/in-memory-users-repository.js";
 import { FakePasswordHasher } from "@/infrastructure/cryptography/fake-password-hasher.js";
-import { InvalidPixKeyError } from "@/domain/user/errors/invalid-pix-key-error.js";
 import { PixKeyAlreadyTakenError } from "@/domain/user/errors/pix-key-already-taken-error.js";
 import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
 import { RegisterSellerUseCase } from "../register-seller.js";
@@ -101,22 +100,21 @@ describe('Register Seller Use Case', () => {
     expect(inMemoryUsersRepository.items).toHaveLength(1);
   });
 
-  test("it should not be able register seller without pix key", async () => {
-    await expect(
-      sut.execute({
-        firstName: "Joao",
-        lastName: "Pedro",
-        username: "joao_pedro",
-        password: "senha1234",
-        phone: "11999999999",
-        birthDate: "1999-01-01",
-        companyName: "Company name",
-        cpf: "11144477735",
-        photoKey: null,
-        pixKey: "   ",
-      }),
-    ).rejects.toBeInstanceOf(InvalidPixKeyError);
+  test("it should be able register seller without pix key", async () => {
+    const result = await sut.execute({
+      firstName: "Joao",
+      lastName: "Pedro",
+      username: "joao_pedro",
+      password: "senha1234",
+      phone: "11999999999",
+      birthDate: "1999-01-01",
+      companyName: "Company name",
+      cpf: "11144477735",
+      photoKey: null,
+      pixKey: null,
+    });
 
-    expect(inMemoryUsersRepository.items).toHaveLength(0);
+    expect(result.username).toBe("joao_pedro");
+    expect(inMemoryUsersRepository.items[0].pixKey).toBeNull();
   });
 })

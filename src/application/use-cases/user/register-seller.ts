@@ -14,6 +14,7 @@ import { Phone } from "@/domain/user/value-objects/phone.js";
 import { Photo } from "@/domain/user/value-objects/photo.js";
 import { PixKey } from "@/domain/user/value-objects/pix-key.js";
 import { Username } from "@/domain/user/value-objects/username.js";
+import { CpfAlreadyTakenError } from "@/domain/user/errors/cpf-alerady-taken-error.js";
 
 export class RegisterSellerUseCase {
   constructor(
@@ -29,7 +30,7 @@ export class RegisterSellerUseCase {
     const cpf = new Cpf(input.cpf);
     const companyName = new CompanyName(input.companyName);
     const photo = input.photoKey ? Photo.create(input.photoKey) : null;
-    const pixKey = new PixKey(input.pixKey);
+    const pixKey = input.pixKey ? new PixKey(input.pixKey) : null;
 
     if (input.password.trim().length < 8) {
       throw new InvalidUserOperationError(
@@ -42,10 +43,10 @@ export class RegisterSellerUseCase {
     }
 
     if (await this.usersRepository.findByCpf(cpf.value)) {
-      throw new UsernameAlreadyTakenError(username.getValue);
+      throw new CpfAlreadyTakenError(username.getValue);
     }
 
-    if (await this.usersRepository.findByPixKey(pixKey.sanitize())) {
+    if (pixKey && (await this.usersRepository.findByPixKey(pixKey.sanitize()))) {
       throw new PixKeyAlreadyTakenError(pixKey.format());
     }
 

@@ -2,7 +2,7 @@ import { GetProfileSellerDTO } from "@/application/dtos/user/get-profile-seller.
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";
 
-export class GetSellerProfile {
+export class GetSellerProfileUseCase {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute(id: string): Promise<GetProfileSellerDTO> {

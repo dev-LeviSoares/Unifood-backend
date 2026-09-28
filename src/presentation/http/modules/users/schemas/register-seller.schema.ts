@@ -10,7 +10,7 @@ export const registerSellerSchema = z.object({
   cpf: z.string(),
   companyName: z.string(),
   photoKey: z.string().nullish(),
-  pixKey: z.string().trim().min(1),
+  pixKey: z.string().trim().nullish(),
 });
 
 export type RegisterSellerBody = z.infer<typeof registerSellerSchema>;

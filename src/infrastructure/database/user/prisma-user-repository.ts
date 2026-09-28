@@ -75,4 +75,25 @@ export class PrismaUsersRepository implements UsersRepository{
       }
     });
   }
+
+  async save(id: string, user: User): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        username: user.username.getValue,
+        firstName: user.fullName.firstName,
+        lastName: user.fullName.lastName,
+        passwordHash: user.passwordHash,
+        cpf: user.cpf?.value ?? null,
+        telephone: user.phone.getValue,
+        birthDate: user.birthDate.value,
+        companyName: user.companyName?.getValue ?? null,
+        pixKey: user.pixKey?.sanitize() ?? null,
+        status: user.status,
+        avatarUrl: user.photo?.value ?? null,
+        role: user.role,
+        updatedAt: user.updatedAt,
+      },
+    });
+  }
 }

@@ -6,4 +6,5 @@ export interface UsersRepository {
   findByCpf(cpf: string): Promise<User | null>;
   findByPixKey(pixKey: string): Promise<User | null>;
   create(user: User): Promise<void>;
+  save(id: string, user: User): Promise<void>;
 }

@@ -43,12 +43,28 @@ interface RegisterSellerInput extends RegisterUserInput {
   cpf: Cpf;
   companyName: CompanyName;
   photo: Photo | null;
-  pixKey: PixKey;
+  pixKey: PixKey | null;
 }
 
 interface RegisterManagerInput extends RegisterUserInput {
   cpf: Cpf;
 }
+
+interface UpdateUserProfileInput {
+  fullName?: FullName,
+  username?: Username,
+  phone?: Phone,
+  birthDate?: BirthDate;
+}
+
+interface UpdateSellerProfileInput extends UpdateUserProfileInput {
+  companyName?: CompanyName;
+  photo?: Photo | null;
+}
+
+interface UpdateStudentProfileInput extends UpdateUserProfileInput {}
+
+interface UpdateManagerProfileInput extends UpdateUserProfileInput {}
 
 export class User {
   private readonly props: UserProps;
@@ -120,6 +136,23 @@ export class User {
     })
   }
 
+  updateSellerProfile(input: UpdateSellerProfileInput): void {
+    this.assertRole(Role.SELLER);
+    this.changeProfile(input);
+    if (input.companyName) this.props.companyName = input.companyName;
+    if (input.photo !== undefined) this.props.photo = input.photo;
+  }
+
+  updateStudentProfile(input: UpdateStudentProfileInput): void {
+    this.assertRole(Role.STUDENT);
+    this.changeProfile(input);
+  }
+
+  updateManagerProfile(input: UpdateManagerProfileInput): void {
+    this.assertRole(Role.MANAGER);
+    this.changeProfile(input);
+  }
+  
   approve(): void {
     this.assertRole(Role.SELLER);
     this.assertStatus(AccountStatus.PENDING, "aprovar");
@@ -239,6 +272,14 @@ export class User {
         `Não é possível ${action} um usuário com status ${this.props.status}.`,
       );
     }
+  }
+
+  private changeProfile(input: UpdateUserProfileInput): void {
+    if (input.fullName) this.props.fullName = input.fullName;
+    if (input.username) this.props.username = input.username;
+    if (input.phone) this.props.phone = input.phone;
+    if (input.birthDate) this.props.birthDate = input.birthDate;
+    this.touch();
   }
 
   private touch(): void {
