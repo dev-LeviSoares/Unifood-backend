@@ -9,7 +9,6 @@ let passwordHasher: FakePasswordHasher;
 let sut: RegisterSellerUseCase
 
 describe('Register Seller Use Case', () => {
-
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     passwordHasher = new FakePasswordHasher();

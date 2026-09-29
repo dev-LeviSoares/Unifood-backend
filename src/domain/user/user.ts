@@ -152,6 +152,12 @@ export class User {
     this.assertRole(Role.MANAGER);
     this.changeProfile(input);
   }
+
+  setPixKey(pixKey: PixKey): void {
+    this.assertRole(Role.SELLER);
+    this.props.pixKey = pixKey;
+    this.touch();
+  }
   
   approve(): void {
     this.assertRole(Role.SELLER);
@@ -245,7 +251,6 @@ export class User {
   get updatedAt(): Date {
     return this.props.updatedAt;
   }
-
 
   static restore(props: UserProps): User {
     return new User(props);

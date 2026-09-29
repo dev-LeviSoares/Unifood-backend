@@ -1,5 +1,6 @@
 import type { UsersRepository } from "@/domain/user/repository/users-repository.js";
 import type { User } from "@/domain/user/user.js";
+import { PixKey } from "@/domain/user/value-objects/pix-key.js";
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = [];
@@ -39,6 +40,14 @@ export class InMemoryUsersRepository implements UsersRepository {
   
     if (index >= 0) {
       this.items[index] = user;
+    }
+  }
+
+  async savePixKey(id: string, pix: string): Promise<void> {
+    const user = this.items.find((item) => item.id === id);
+    
+    if (user) {
+      user.setPixKey(new PixKey(pix));
     }
   }
 }

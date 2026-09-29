@@ -96,4 +96,11 @@ export class PrismaUsersRepository implements UsersRepository{
       },
     });
   }
+
+  async savePixKey(id: string, pix: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { pixKey: pix }
+    });
+  }
 }
