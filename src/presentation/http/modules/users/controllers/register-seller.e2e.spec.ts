@@ -2,7 +2,7 @@ import { createHttpServer } from "@/app.js"
 
 describe("POST /auth/register/seller", () => {
   it("should register a seller", async () => {
-    const http = createHttpServer();
+    const http = await createHttpServer();
     
     const response = await http.inject({
       method: "POST",

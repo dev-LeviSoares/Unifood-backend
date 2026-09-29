@@ -2,6 +2,8 @@ import { HttpInjectResponse, HttpServer } from "@/application/contracts/http-ser
 import { HttpController } from "@/application/contracts/http.js";
 import Fastify, { type FastifyInstance } from "fastify";
 import { mapDomainError } from "./map-error.js";
+import { setupSwagger } from "./swagger/swagger.js";
+import { RouteSchema } from "@/application/contracts/routeSchema.js";
 
 export class FastifyHttpServer implements HttpServer {
   private readonly app: FastifyInstance;
@@ -14,9 +16,11 @@ export class FastifyHttpServer implements HttpServer {
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
     path: string,
     controller: HttpController,
+    schema?: RouteSchema,
   ): void {
     this.app[method.toLowerCase() as "get" | "post" | "put" | "patch" | "delete"](
       path,
+      { schema },
       async (request, reply) => {
         try {
           const response = await controller.handle({
@@ -55,5 +59,9 @@ export class FastifyHttpServer implements HttpServer {
       status: response.statusCode,
       body: response.json(),
     };
+  }
+
+  async setupSwagger(): Promise<void> {
+    await setupSwagger(this.app);
   }
 }

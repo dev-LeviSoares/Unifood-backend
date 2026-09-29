@@ -2,7 +2,7 @@ import { createHttpServer } from "@/app.js";
 
 describe("PUT /seller/pix-key/:id", () => {
   it("should return the updated seller profile", async () => {
-    const http = createHttpServer();
+    const http = await createHttpServer();
 
     const registered = await http.inject({
       method: "POST",
