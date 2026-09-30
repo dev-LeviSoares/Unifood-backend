@@ -5,6 +5,7 @@ import { makeRegisterSellerController } from "@/infrastructure/factories/users/m
 import { makeGetSellerProfileController } from "@/infrastructure/factories/users/make-get-seller-profile.js";
 import { makeUpdateSellerProfileController } from "@/infrastructure/factories/users/make-update-seller-profile.js";
 import { makeRegisterPixController } from "@/infrastructure/factories/users/make-register-pix.js";
+import { makeGetKeyPixController } from "@/infrastructure/factories/users/make-get-pix.js";
 
 export function registerRoutes(http: HttpServer) {
   registerUserRoutes(http, {
@@ -13,5 +14,6 @@ export function registerRoutes(http: HttpServer) {
     getSellerProfile: makeGetSellerProfileController(),
     updateSellerProfile: makeUpdateSellerProfileController(),
     registerPix: makeRegisterPixController(),
+    getPix: makeGetKeyPixController(),
   });
 }

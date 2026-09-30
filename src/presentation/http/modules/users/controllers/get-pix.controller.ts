@@ -3,12 +3,11 @@ import {
   HttpRequest,
   HttpResponse,
 } from "@/application/contracts/http.js";
-import { GetSellerProfileUseCase } from "@/application/use-cases/user/get-seller-profile.js";
 import { uuidSchema } from "../../shared/schema/get-uuid.schema.js";
+import { GetPixKeyUseCase } from "@/application/use-cases/user/get-pix.js";
 
-
-export class GetSellerProfileController implements HttpController {
-  constructor(private readonly getSellerProfile: GetSellerProfileUseCase) {}
+export class GetPixKeyController implements HttpController {
+  constructor(private readonly getPixSeller: GetPixKeyUseCase) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     const parsed = uuidSchema.safeParse(request.params);
@@ -23,11 +22,11 @@ export class GetSellerProfileController implements HttpController {
       }
     }
 
-    const user = await this.getSellerProfile.execute(parsed.data?.id);
+    const pixKey = await this.getPixSeller.execute(parsed.data?.id);
 
     return { 
       status: 200, 
-      body: user
+      body: { pixKey }
     };
   }
 }

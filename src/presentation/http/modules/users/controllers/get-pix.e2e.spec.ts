@@ -1,7 +1,7 @@
 import { createHttpServer } from "@/app.js";
 
-describe("GET /auth/seller/profile/:id", () => {
-  it("should return the seller profile", async () => {
+describe("GET /seller/pix-key/:id", () => {
+  it("should return the pix key seller", async () => {
     const http = await createHttpServer();
 
     const registered = await http.inject({
@@ -25,19 +25,11 @@ describe("GET /auth/seller/profile/:id", () => {
 
     const response = await http.inject({
       method: "GET",
-      path: `/seller/profile/${id}`,
+      path: `/seller/pix-key/${id}`,
     });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      fullName: "Joao Pedro",
-      username: "joao_pedro",
-      cpf: "111.444.777-35",
-      phone: "11999999999",
-      companyName: "company test",
-      photoKey: "avatars/f81d4fae-7dec-11d0-a765-00a0c91e6bf6.png",
-      status: "PENDING",
-      birthDate: "1999-01-01",
       pixKey: "joao.pedro@email.com",
     });
   });
