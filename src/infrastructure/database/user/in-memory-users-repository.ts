@@ -43,11 +43,13 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
   }
 
-  async savePixKey(id: string, pix: string): Promise<void> {
+  async savePixKey(id: string, pix: string | null): Promise<void> {
     const user = this.items.find((item) => item.id === id);
-    
-    if (user) {
-      user.setPixKey(new PixKey(pix));
+    if (!user) return;
+    if (pix === null) {
+      user.deletePixKey();
+      return;
     }
+    user.setPixKey(new PixKey(pix));
   }
 }

@@ -7,5 +7,5 @@ export interface UsersRepository {
   findByPixKey(pixKey: string): Promise<User | null>;
   create(user: User): Promise<void>;
   save(id: string, user: User): Promise<void>;
-  savePixKey(id: string, pix: string): Promise<void>;
+  savePixKey(id: string, pix: string | null): Promise<void>;
 }

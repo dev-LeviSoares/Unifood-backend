@@ -31,9 +31,9 @@ describe("PUT /seller/pix-key/:id", () => {
       }
     });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toEqual({
-      pixKey: "joao.pedro@email.com",
+      pix: "joao.pedro@email.com",
     });
   });
 });

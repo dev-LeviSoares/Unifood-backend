@@ -6,6 +6,7 @@ import { registerSellerDoc } from "./docs/register-seller.doc.js";
 import { getSellerProfile } from "./docs/get-seller-profile.doc.js";
 import { updateSellerProfileDoc } from "./docs/update-seller-profile.doc.js";
 import { getPixKey } from "./docs/get-pix.doc.js";
+import { deletePixKey } from "./docs/delete-pix.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -14,6 +15,7 @@ interface UserControllers {
   updateSellerProfile: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
+  deletePix: HttpController;
 }
 
 export function registerUserRoutes(http: HttpServer, controllers: UserControllers) {
@@ -23,4 +25,5 @@ export function registerUserRoutes(http: HttpServer, controllers: UserController
   http.on("PATCH", "/seller/profile/:id", controllers.updateSellerProfile, updateSellerProfileDoc);
   http.on("PUT", "/seller/pix-key/:id", controllers.registerPix, registerPixDoc);
   http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey);
+  http.on("DELETE", "/seller/pix-key/:id", controllers.deletePix, deletePixKey );
 }

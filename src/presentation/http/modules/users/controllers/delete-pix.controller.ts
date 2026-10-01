@@ -4,10 +4,10 @@ import {
   HttpResponse,
 } from "@/application/contracts/http.js";
 import { uuidSchema } from "../../shared/schema/get-uuid.schema.js";
-import { GetPixKeyUseCase } from "@/application/use-cases/user/get-pix.js";
+import { DeletePixKeyUseCase } from "@/application/use-cases/user/delete-pix.js";
 
-export class GetPixKeyController implements HttpController {
-  constructor(private readonly getPixSeller: GetPixKeyUseCase) {}
+export class DeletePixKeyController implements HttpController {
+  constructor(private readonly deletePixKeySeller: DeletePixKeyUseCase) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     const parsed = uuidSchema.safeParse(request.params);
@@ -22,11 +22,11 @@ export class GetPixKeyController implements HttpController {
       }
     }
 
-    const pix = await this.getPixSeller.execute(parsed.data?.id);
+    await this.deletePixKeySeller.execute(parsed.data?.id);
 
     return { 
-      status: 200, 
-      body: { pix }
+      status: 201, 
+      body: null,
     };
   }
 }

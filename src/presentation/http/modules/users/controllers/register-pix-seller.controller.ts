@@ -25,14 +25,14 @@ export class RegisterPixController implements HttpController {
       }
     }
 
-    const pixKey = await this.registerPixSeller.execute(
+    const pix = await this.registerPixSeller.execute(
       params.data?.id,
       body.data.pix 
     );
 
     return { 
-      status: 200, 
-      body: { pixKey }
+      status: 201, 
+      body: { pix }
     };
   }
 }

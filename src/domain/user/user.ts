@@ -158,6 +158,12 @@ export class User {
     this.props.pixKey = pixKey;
     this.touch();
   }
+
+  deletePixKey(): void {
+    this.assertRole(Role.SELLER);
+    this.props.pixKey = null;
+    this.touch();
+  }
   
   approve(): void {
     this.assertRole(Role.SELLER);

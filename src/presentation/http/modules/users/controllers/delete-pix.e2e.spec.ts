@@ -1,7 +1,7 @@
 import { createHttpServer } from "@/app.js";
 
-describe("GET /seller/pix-key/:id", () => {
-  it("should return the pix key seller", async () => {
+describe("DELETE /seller/pix-key/:id", () => {
+  it("should delete the pix key seller", async () => {
     const http = await createHttpServer();
 
     const registered = await http.inject({
@@ -24,13 +24,11 @@ describe("GET /seller/pix-key/:id", () => {
     const { id } = registered.body as { id: string };
 
     const response = await http.inject({
-      method: "GET",
+      method: "DELETE",
       path: `/seller/pix-key/${id}`,
     });
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      pix: "joao.pedro@email.com",
-    });
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({});
   });
 });
