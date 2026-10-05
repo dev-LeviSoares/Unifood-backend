@@ -11,6 +11,20 @@ export const getSellerProfile: RouteSchema = {
     },
   },
   response: {
-    201: { type: "object", additionalProperties: true },
+    201: { 
+      type: "object", 
+      properties: {
+        fullName: { type: "string" },
+        username: { type: "string" },
+        cpf: { type: "string" },
+        phone: { type: "string" },
+        companyName: { type: "string" },
+        photoKey: { type: "string", nullable: true },
+        status: { type: "string" },
+        birthDate: { type: "string" },
+        pixKey: { type: "string", nullable: true },
+        
+      },
+    },
   },
 }

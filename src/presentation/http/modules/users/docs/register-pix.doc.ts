@@ -18,10 +18,10 @@ export const registerPixDoc: RouteSchema = {
     },
   },
   response: {
-    200: {
+    201: {
       type: "object",
       properties: {
-        pixKey: { type: "string" },
+        pix: { type: "string" },
       },
     },
   },

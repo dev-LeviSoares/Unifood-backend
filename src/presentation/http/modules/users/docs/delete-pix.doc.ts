@@ -1,9 +1,8 @@
 import type { RouteSchema } from "@/application/contracts/routeSchema.js";
-import { object, properties } from "zod";
 
-export const getPixKey: RouteSchema = {
+export const deletePixKey: RouteSchema = {
   tags: ["Seller"],
-  summary: "Buscar chave PIX do seller",
+  summary: "Deletar chave PIX do seller",
   params: {
     type: "object",
     required: ["id"],
@@ -12,11 +11,6 @@ export const getPixKey: RouteSchema = {
     },
   },
   response: {
-    200: { 
-      type: "object", 
-      properties: {
-        pix: { type: "string" },
-      }
-    },
+    201: { type: "object" },
   },
 }
