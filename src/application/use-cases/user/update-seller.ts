@@ -1,4 +1,3 @@
-
 import { UpdateSellerDTO } from "@/application/dtos/user/update-seller.dto.js";
 import { UpdatedUserDTO } from "@/application/dtos/user/updated-user.dto.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";

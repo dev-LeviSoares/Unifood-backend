@@ -103,4 +103,5 @@ export class PrismaUsersRepository implements UsersRepository{
       data: { pixKey: pix }
     });
   }
+
 }
