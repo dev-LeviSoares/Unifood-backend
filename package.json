@@ -26,6 +26,7 @@
   "homepage": "https://github.com/dev-LeviSoares/Unifood-backend#readme",
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
+    "@types/jsonwebtoken": "9.0.10",
     "@types/node": "26.6.2",
     "@types/pg": "8.23.1",
     "prisma": "7.10.0",
@@ -43,6 +44,7 @@
     "bcryptjs": "3.0.3",
     "dotenv": "18.0.3",
     "fastify": "^5.12.5",
+    "jsonwebtoken": "9.0.3",
     "pg": "8.23.0",
     "zod": "^4.6.5"
   }

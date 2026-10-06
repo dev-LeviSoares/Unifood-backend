@@ -1,4 +1,4 @@
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
 import { PasswordHasher } from "@/application/contracts/password-hasher.js";
 
 export class BcryptPasswordHasher implements PasswordHasher {
@@ -6,5 +6,9 @@ export class BcryptPasswordHasher implements PasswordHasher {
 
   hash(plain: string): Promise<string> {
     return hash(plain, this.saltRounds)
+  }
+
+  compare(password: string, passwordHash: string): Promise<boolean> {
+    return compare(password, passwordHash)
   }
 }

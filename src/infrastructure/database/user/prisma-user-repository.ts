@@ -42,6 +42,18 @@ export class PrismaUsersRepository implements UsersRepository{
     return PrismaUserMapper.toDomain(row);
   }
 
+  // async findByEmail(email: string): Promise<User | null> {
+  //   const row = await this.prisma.user.findUnique({
+  //     where: { email },
+  //   });
+
+  //   if(!row) {
+  //     return null
+  //   }
+
+  //   return PrismaUserMapper.toDomain(row);
+  // }
+
   async findByPixKey(pixKey: string): Promise<User | null> {
     const row = await this.prisma.user.findUnique({
       where: { pixKey },
