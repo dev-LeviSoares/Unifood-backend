@@ -17,6 +17,7 @@ interface UserControllers {
   getPix: HttpController;
   deletePix: HttpController;
   changeStatusSeller: HttpController;
+  authenticateUser: HttpController;
 }
 
 export function registerUserRoutes(http: HttpServer, controllers: UserControllers) {
@@ -28,4 +29,5 @@ export function registerUserRoutes(http: HttpServer, controllers: UserController
   http.on("PUT", "/seller/pix-key/:id", controllers.registerPix, registerPixDoc);
   http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey);
   http.on("DELETE", "/seller/pix-key/:id", controllers.deletePix, deletePixKey );
+  http.on("POST", "/auth/login", controllers.authenticateUser, )
 }
