@@ -31,7 +31,8 @@ export class RegisterSellerController implements HttpController {
       birthDate: parsed.data.birthDate,
       cpf: parsed.data.cpf,
       companyName: parsed.data.companyName,
-      photoKey: parsed.data.photoKey ?? null
+      photoKey: parsed.data.photoKey ?? null,
+      pixKey: parsed.data.pixKey || null,
     });
 
     return { 

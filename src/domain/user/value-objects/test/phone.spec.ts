@@ -7,7 +7,7 @@ describe("Create Phone", () => {
     
     const phone = new Phone(value);
 
-    expect(phone.getValue()).toBe("11911111111");
+    expect(phone.getValue).toBe("11911111111");
   });
 
   test("It should be possible format a phone", () => {
@@ -17,7 +17,7 @@ describe("Create Phone", () => {
 
     const phoneFormatted = phone.format()
 
-    expect(phone.getValue()).toBe("11911111111")
+    expect(phone.getValue).toBe("11911111111")
     expect(phoneFormatted).toBe("(11) 91111-1111")
   });
 });

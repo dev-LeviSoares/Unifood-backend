@@ -2,6 +2,7 @@ import { RegisterSellerDTO } from "@/application/dtos/user/register-seller.dto.j
 import { RegisteredUserDTO } from "@/application/dtos/user/registered-user.dto.js";
 import { PasswordHasher } from "@/application/contracts/password-hasher.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
+import { PixKeyAlreadyTakenError } from "@/domain/user/errors/pix-key-already-taken-error.js";
 import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";
 import { User } from "@/domain/user/user.js";
@@ -11,7 +12,9 @@ import { Cpf } from "@/domain/user/value-objects/cpf.js";
 import { FullName } from "@/domain/user/value-objects/full-name.js";
 import { Phone } from "@/domain/user/value-objects/phone.js";
 import { Photo } from "@/domain/user/value-objects/photo.js";
+import { PixKey } from "@/domain/user/value-objects/pix-key.js";
 import { Username } from "@/domain/user/value-objects/username.js";
+import { CpfAlreadyTakenError } from "@/domain/user/errors/cpf-alerady-taken-error.js";
 
 export class RegisterSellerUseCase {
   constructor(
@@ -27,6 +30,7 @@ export class RegisterSellerUseCase {
     const cpf = new Cpf(input.cpf);
     const companyName = new CompanyName(input.companyName);
     const photo = input.photoKey ? Photo.create(input.photoKey) : null;
+    const pixKey = input.pixKey ? new PixKey(input.pixKey) : null;
 
     if (input.password.trim().length < 8) {
       throw new InvalidUserOperationError(
@@ -39,7 +43,11 @@ export class RegisterSellerUseCase {
     }
 
     if (await this.usersRepository.findByCpf(cpf.value)) {
-      throw new UsernameAlreadyTakenError(username.getValue);
+      throw new CpfAlreadyTakenError(username.getValue);
+    }
+
+    if (pixKey && (await this.usersRepository.findByPixKey(pixKey.sanitize()))) {
+      throw new PixKeyAlreadyTakenError(pixKey.format());
     }
 
     const passwordHash = await this.passwordHasher.hash(input.password);
@@ -52,6 +60,7 @@ export class RegisterSellerUseCase {
       cpf,
       companyName,
       photo,
+      pixKey,
     });
 
     await this.usersRepository.create(user);

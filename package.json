@@ -36,6 +36,8 @@
     "vitest": "4.1.11"
   },
   "dependencies": {
+    "@fastify/swagger": "9.9.0",
+    "@fastify/swagger-ui": "6.1.1",
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
     "bcryptjs": "3.0.3",

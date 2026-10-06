@@ -1,4 +1,5 @@
 import type { HttpController } from "./http.js";
+import { RouteSchema } from "./routeSchema.js";
 
 export interface HttpInjectResponse {
   status: number;
@@ -10,6 +11,7 @@ export interface HttpServer {
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
     path: string,
     controller: HttpController,
+    schema?: RouteSchema,
   ): void;
 
   listen(port: number): Promise<void>;

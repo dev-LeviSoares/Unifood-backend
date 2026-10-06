@@ -6,6 +6,18 @@ import { PrismaClient } from "@/generated/prisma/client.js";
 export class PrismaUsersRepository implements UsersRepository{
   constructor(private readonly prisma: PrismaClient) {}
 
+  async findById(id: string): Promise<User | null> {
+    const row = await this.prisma.user.findUnique({
+      where: { id }
+    });
+
+    if (!row) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(row);
+  }
+
   async findByUsername(username: string): Promise<User | null> {
     const row = await this.prisma.user.findUnique({
       where: { username },
@@ -30,6 +42,18 @@ export class PrismaUsersRepository implements UsersRepository{
     return PrismaUserMapper.toDomain(row);
   }
 
+  async findByPixKey(pixKey: string): Promise<User | null> {
+    const row = await this.prisma.user.findUnique({
+      where: { pixKey },
+    });
+
+    if (!row) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(row);
+  }
+
   async create(user: User): Promise<void> {
     await this.prisma.user.create({
       data: {
@@ -39,9 +63,10 @@ export class PrismaUsersRepository implements UsersRepository{
         lastName: user.fullName.lastName,
         passwordHash: user.passwordHash,
         cpf: user.cpf?.value ?? null,
-        telephone: user.phone.getValue(),
+        telephone: user.phone.getValue,
         birthDate: user.birthDate.value,
-        companyName: user.companyName?.getValue() ?? null,
+        companyName: user.companyName?.getValue ?? null,
+        pixKey: user.pixKey?.sanitize() ?? null,
         status: user.status,
         avatarUrl: user.photo?.value ?? null,
         role: user.role,
@@ -50,4 +75,33 @@ export class PrismaUsersRepository implements UsersRepository{
       }
     });
   }
+
+  async save(id: string, user: User): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        username: user.username.getValue,
+        firstName: user.fullName.firstName,
+        lastName: user.fullName.lastName,
+        passwordHash: user.passwordHash,
+        cpf: user.cpf?.value ?? null,
+        telephone: user.phone.getValue,
+        birthDate: user.birthDate.value,
+        companyName: user.companyName?.getValue ?? null,
+        pixKey: user.pixKey?.sanitize() ?? null,
+        status: user.status,
+        avatarUrl: user.photo?.value ?? null,
+        role: user.role,
+        updatedAt: user.updatedAt,
+      },
+    });
+  }
+
+  async savePixKey(id: string, pix: string | null): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { pixKey: pix }
+    });
+  }
+
 }

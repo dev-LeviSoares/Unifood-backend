@@ -25,6 +25,6 @@ export class Username {
 
   public equals(other: Username): boolean {
     if (!other) return false;
-    return this.value === other.getValue();
+    return this.value === other.getValue;
   }
 }

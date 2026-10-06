@@ -47,6 +47,7 @@ model User {
   birthDate DateTime @db.Date
 
   companyName String? @db.VarChar(150)
+  pixKey      String? @unique
   status      Status  @default(PENDING)
   avatarUrl   String? @db.Text
   role        Role

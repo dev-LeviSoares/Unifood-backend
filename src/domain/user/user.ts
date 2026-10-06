@@ -7,6 +7,7 @@ import { Phone } from "./value-objects/phone.js";
 import { Cpf } from "./value-objects/cpf.js";
 import { CompanyName } from "./value-objects/company-name.js";
 import { Photo } from "./value-objects/photo.js";
+import { PixKey } from "./value-objects/pix-key.js";
 import { Username } from "./value-objects/username.js";
 import { InvalidUserOperationError } from "./errors/invalid-user-operation-error.js";
 import { Role } from "./enum/role.js";
@@ -23,6 +24,7 @@ interface UserProps {
   cpf: Cpf | null
   companyName: CompanyName | null;
   photo: Photo | null;
+  pixKey: PixKey | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,11 +43,28 @@ interface RegisterSellerInput extends RegisterUserInput {
   cpf: Cpf;
   companyName: CompanyName;
   photo: Photo | null;
+  pixKey: PixKey | null;
 }
 
 interface RegisterManagerInput extends RegisterUserInput {
   cpf: Cpf;
 }
+
+interface UpdateUserProfileInput {
+  fullName?: FullName,
+  username?: Username,
+  phone?: Phone,
+  birthDate?: BirthDate;
+}
+
+interface UpdateSellerProfileInput extends UpdateUserProfileInput {
+  companyName?: CompanyName;
+  photo?: Photo | null;
+}
+
+interface UpdateStudentProfileInput extends UpdateUserProfileInput {}
+
+interface UpdateManagerProfileInput extends UpdateUserProfileInput {}
 
 export class User {
   private readonly props: UserProps;
@@ -69,6 +88,7 @@ export class User {
       cpf: null,
       companyName: null,
       photo: null,
+      pixKey: null,
       createdAt: now,
       updatedAt: now
     })
@@ -89,6 +109,7 @@ export class User {
       cpf: input.cpf,
       companyName: input.companyName,
       photo: input.photo,
+      pixKey: input.pixKey,
       createdAt: now,
       updatedAt: now,
     })
@@ -110,10 +131,40 @@ export class User {
       birthDate: input.birthDate,
       companyName: null,
       phone: input.phone,
-      photo: null
+      photo: null,
+      pixKey: null,
     })
   }
 
+  updateSellerProfile(input: UpdateSellerProfileInput): void {
+    this.assertRole(Role.SELLER);
+    this.changeProfile(input);
+    if (input.companyName) this.props.companyName = input.companyName;
+    if (input.photo !== undefined) this.props.photo = input.photo;
+  }
+
+  updateStudentProfile(input: UpdateStudentProfileInput): void {
+    this.assertRole(Role.STUDENT);
+    this.changeProfile(input);
+  }
+
+  updateManagerProfile(input: UpdateManagerProfileInput): void {
+    this.assertRole(Role.MANAGER);
+    this.changeProfile(input);
+  }
+
+  setPixKey(pixKey: PixKey): void {
+    this.assertRole(Role.SELLER);
+    this.props.pixKey = pixKey;
+    this.touch();
+  }
+
+  deletePixKey(): void {
+    this.assertRole(Role.SELLER);
+    this.props.pixKey = null;
+    this.touch();
+  }
+  
   approve(): void {
     this.assertRole(Role.SELLER);
     this.assertStatus(AccountStatus.PENDING, "aprovar");
@@ -194,6 +245,10 @@ export class User {
   get photo(): Photo | null {
     return this.props.photo;
   }
+
+  get pixKey(): PixKey | null {
+    return this.props.pixKey;
+  }
   
   get createdAt(): Date {
     return this.props.createdAt;
@@ -202,7 +257,6 @@ export class User {
   get updatedAt(): Date {
     return this.props.updatedAt;
   }
-
 
   static restore(props: UserProps): User {
     return new User(props);
@@ -229,6 +283,14 @@ export class User {
         `Não é possível ${action} um usuário com status ${this.props.status}.`,
       );
     }
+  }
+
+  private changeProfile(input: UpdateUserProfileInput): void {
+    if (input.fullName) this.props.fullName = input.fullName;
+    if (input.username) this.props.username = input.username;
+    if (input.phone) this.props.phone = input.phone;
+    if (input.birthDate) this.props.birthDate = input.birthDate;
+    this.touch();
   }
 
   private touch(): void {

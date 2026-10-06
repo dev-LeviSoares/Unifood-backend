@@ -18,7 +18,7 @@ export class Phone {
     return phone.length >= 10 && phone.length <= 11;
   }
 
-  public getValue(): string {
+  public get getValue(): string {
     return this.value;
   }
 
