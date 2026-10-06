@@ -1,13 +1,13 @@
 import { InMemoryUsersRepository } from "@/infrastructure/database/user/in-memory-users-repository.js";
 import { FakePasswordHasher } from "@/infrastructure/cryptography/fake-password-hasher.js";
 import { RegisterSellerUseCase } from "../register-seller.js";
-import { AuthenticateUserUseCase } from "../authenticate-user.js";
 import { FakeEncrypter } from "@/infrastructure/cryptography/fake-jwt-encrypter.js";
 import { InvalidCredentialsError } from "@/domain/user/errors/invalid-credentials-error.js";
+import { AuthenticateManagerUseCase } from "../authenticate-manager.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let registerSeller: RegisterSellerUseCase
-let sut: AuthenticateUserUseCase;
+let sut: AuthenticateManagerUseCase;
 
 describe("Change status a seller Use Case", () => {
   beforeEach(() => {
@@ -16,14 +16,14 @@ describe("Change status a seller Use Case", () => {
       inMemoryUsersRepository,
       new FakePasswordHasher(),
     );
-    sut = new AuthenticateUserUseCase(
+    sut = new AuthenticateManagerUseCase(
       inMemoryUsersRepository, 
       new FakePasswordHasher(), 
       new FakeEncrypter()
     );
   });
 
-  test("it should be able to authenticate user", async () => {
+  test("it should be able to authenticate manager", async () => {
     const seller = await registerSeller.execute({
       firstName: "Joao",
       lastName: "Pedro",
@@ -37,14 +37,14 @@ describe("Change status a seller Use Case", () => {
       pixKey: "joao.pedro@email.com",
     });
 
-    const result = await sut.execute({ username:"joao_pedro", password: "senha1234"});
+    const result = await sut.execute({ cpf:"11144477735", password: "senha1234"});
 
     expect(result).toEqual(JSON.stringify({ sub: seller.id }));
   });
 
-  test("it should not be able to authenticate another user that does not exist", async () => {
+  test("it should not be able to authenticate another manager that does not exist", async () => {
     await expect(
-      sut.execute({ username:"joao_pedro", password: "senha1234"}),
+      sut.execute({ cpf:"11144477735", password: "senha1234"}),
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
 
