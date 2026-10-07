@@ -1,4 +1,4 @@
-import { Encrypter } from "@/application/contracts/encrypter.js";
+import { Encrypter } from "@/application/contracts/auth/encrypter.js";
 import { PasswordHasher } from "@/application/contracts/password-hasher.js";
 import { AuthenticateUserDTO } from "@/application/dtos/user/authenticate-user.dto.js";
 import { InvalidCredentialsError } from "@/domain/user/errors/invalid-credentials-error.js";
@@ -29,6 +29,8 @@ export class AuthenticateUserUseCase {
 
     const accessToken = await this.encrypter.encrypt({
       sub: user.id,
+      role: user.role,
+      name: user.fullName.value
     });
     
     return accessToken

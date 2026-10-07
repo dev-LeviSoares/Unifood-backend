@@ -1,7 +1,8 @@
-import { Encrypter } from "@/application/contracts/encrypter.js";
+import { Decrypter } from "@/application/contracts/auth/decrypter.js";
+import { Encrypter } from "@/application/contracts/auth/encrypter.js";
 import jwt, { type SignOptions } from "jsonwebtoken";
 
-export class JwtAdapter implements Encrypter {
+export class JwtEncrypt implements Encrypter {
   constructor(
     private readonly secret: string,
     private readonly expiresIn: SignOptions["expiresIn"],
@@ -11,9 +12,5 @@ export class JwtAdapter implements Encrypter {
     return jwt.sign(payload, this.secret, {
       expiresIn: this.expiresIn,
     });
-  }
-
-  async decrypt(token: string): Promise<Record<string, unknown>> {
-    return jwt.verify(token, this.secret) as Record<string, unknown>;
   }
 }

@@ -25,7 +25,12 @@ export class UpdateSellerController implements HttpController {
       }
     }
 
-    const user = await this.updateSellerProfile.execute(params.data?.id, body.data );
+    const user = await this.updateSellerProfile.execute(
+      params.data?.id, 
+      body.data,
+      request.user?.sub || "",
+      request.user?.role || ""
+    );
 
     return { 
       status: 200, 

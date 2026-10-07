@@ -23,12 +23,27 @@ describe("PUT /seller/pix-key/:id", () => {
 
     const { id } = registered.body as { id: string };
 
+    // Fazer login para obter token
+    const loginResponse = await http.inject({
+      method: "POST",
+      path: "/auth/login",
+      payload: {
+        username: "joao_pedro",
+        password: "senha1234",
+      },
+    });
+
+    const { accessToken } = loginResponse.body as { accessToken: string };
+
     const response = await http.inject({
       method: "PUT",
       path: `/seller/pix-key/${id}`,
       payload: {
         pix: "joao.pedro@email.com"
-      }
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     });
 
     expect(response.status).toBe(201);

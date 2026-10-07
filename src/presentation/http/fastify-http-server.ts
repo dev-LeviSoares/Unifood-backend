@@ -4,6 +4,9 @@ import Fastify, { type FastifyInstance } from "fastify";
 import { mapDomainError } from "./map-error.js";
 import { setupSwagger } from "./swagger/swagger.js";
 import { RouteSchema } from "@/application/contracts/routeSchema.js";
+import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
+import { isHttpResponse, runMiddlewares } from "./middlewares/run-middlewares.js";
+import { toHttpRequest } from "./to-http-request.js";
 
 export class FastifyHttpServer implements HttpServer {
   private readonly app: FastifyInstance;
@@ -17,18 +20,23 @@ export class FastifyHttpServer implements HttpServer {
     path: string,
     controller: HttpController,
     schema?: RouteSchema,
+    middlewares?: HttpMiddleware[],
   ): void {
     this.app[method.toLowerCase() as "get" | "post" | "put" | "patch" | "delete"](
       path,
       { schema },
       async (request, reply) => {
         try {
-          const response = await controller.handle({
-            body: request.body,
-            params: request.params as Record<string, string>,
-            query: request.query as Record<string, string>,
-            headers: request.headers,
-          });
+          const prepared = await runMiddlewares(
+            toHttpRequest(request),
+            middlewares,
+          );
+
+          if (isHttpResponse(prepared)) {
+            return reply.status(prepared.status).send(prepared.body);
+          }
+
+          const response = await controller.handle(prepared);
           
           return reply.status(response.status).send(response.body);
         } catch (error) {
@@ -48,11 +56,13 @@ export class FastifyHttpServer implements HttpServer {
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
     path: string;
     payload?: Record<string, unknown>;
+    headers?: Record<string, string>;
   }): Promise<HttpInjectResponse> {
     const response = await this.app.inject({
       method: input.method,
       url: input.path,
       payload: input.payload,
+      headers: input.headers,
     });
   
     return {

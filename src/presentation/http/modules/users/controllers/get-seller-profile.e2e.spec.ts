@@ -23,9 +23,24 @@ describe("GET /auth/seller/profile/:id", () => {
 
     const { id } = registered.body as { id: string };
 
+    // Fazer login para obter token
+    const loginResponse = await http.inject({
+      method: "POST",
+      path: "/auth/login",
+      payload: {
+        username: "joao_pedro",
+        password: "senha1234",
+      },
+    });
+
+    const { accessToken } = loginResponse.body as { accessToken: string };
+
     const response = await http.inject({
       method: "GET",
       path: `/seller/profile/${id}`,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     });
 
     expect(response.status).toBe(200);

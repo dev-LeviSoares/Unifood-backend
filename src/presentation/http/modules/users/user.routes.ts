@@ -10,6 +10,8 @@ import { deletePixKey } from "./docs/delete-pix.doc.js";
 import { changeStatusSellerDoc } from "./docs/change-status-seller.doc.js";
 import { authenticateUserDoc } from "./docs/authenticate-user.doc.js";
 import { authenticateManagerDoc } from "./docs/authenticate-manager.doc.js";
+import { makeAuthMiddleware } from "@/infrastructure/factories/jwt/make-auth-middleware.js";
+import { RoleMiddleware } from "../../middlewares/role-middleware.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -24,19 +26,82 @@ interface UserControllers {
   authenticateManager: HttpController;
 }
 
-export function registerUserRoutes(http: HttpServer, controllers: UserControllers) {
-  http.on("POST", "/auth/register/student", controllers.registerStudent, registerStudentDoc);
-  http.on("POST", "/auth/register/seller", controllers.registerSeller, registerSellerDoc);
+const auth = makeAuthMiddleware();
 
-  http.on("POST", "/auth/login", controllers.authenticateUser, authenticateUserDoc);
-  http.on("POST", "/auth/login/manager", controllers.authenticateManager, authenticateManagerDoc);
+export function registerUserRoutes(
+  http: HttpServer,
+  controllers: UserControllers,
+) {
+  http.on(
+    "POST",
+    "/auth/register/student",
+    controllers.registerStudent,
+    registerStudentDoc,
+  );
 
-  http.on("GET", "/seller/profile/:id", controllers.getSellerProfile, getSellerProfile);
-  http.on("PATCH", "/seller/profile/:id", controllers.updateSellerProfile, updateSellerProfileDoc);
-  http.on("PATCH", "/seller/status/:id", controllers.changeStatusSeller,changeStatusSellerDoc);
-  
-  http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey);
-  http.on("PUT", "/seller/pix-key/:id", controllers.registerPix, registerPixDoc);
-  http.on("DELETE", "/seller/pix-key/:id", controllers.deletePix, deletePixKey);
-  
+  http.on(
+    "POST",
+    "/auth/register/seller",
+    controllers.registerSeller,
+    registerSellerDoc,
+  );
+
+  http.on(
+    "POST",
+    "/auth/login",
+    controllers.authenticateUser,
+    authenticateUserDoc,
+  );
+
+  http.on(
+    "POST",
+    "/auth/login/manager",
+    controllers.authenticateManager,
+    authenticateManagerDoc,
+  );
+
+  http.on(
+    "GET",
+    "/seller/profile/:id",
+    controllers.getSellerProfile,
+    getSellerProfile,
+    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+  );
+
+  http.on(
+    "PATCH",
+    "/seller/profile/:id",
+    controllers.updateSellerProfile,
+    updateSellerProfileDoc,
+    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+  );
+
+  http.on(
+    "PATCH",
+    "/seller/status/:id",
+    controllers.changeStatusSeller,
+    changeStatusSellerDoc,
+    [auth, new RoleMiddleware(["MANAGER"])],
+  );
+
+  http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey, [
+    auth,
+    new RoleMiddleware(["SELLER", "MANAGER"]),
+  ]);
+
+  http.on(
+    "PUT",
+    "/seller/pix-key/:id",
+    controllers.registerPix,
+    registerPixDoc,
+    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+  );
+
+  http.on(
+    "DELETE",
+    "/seller/pix-key/:id",
+    controllers.deletePix,
+    deletePixKey,
+    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+  );
 }

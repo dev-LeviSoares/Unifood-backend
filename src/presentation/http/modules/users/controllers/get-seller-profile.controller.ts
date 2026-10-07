@@ -23,7 +23,11 @@ export class GetSellerProfileController implements HttpController {
       }
     }
 
-    const user = await this.getSellerProfile.execute(parsed.data?.id);
+    const user = await this.getSellerProfile.execute(
+      parsed.data?.id,
+      request.user?.sub,
+      request.user?.role
+    );
 
     return { 
       status: 200, 

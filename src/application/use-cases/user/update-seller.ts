@@ -13,11 +13,21 @@ import { Username } from "@/domain/user/value-objects/username.js";
 export class UpdateSellerProfile {
   constructor(private readonly usersRepository: UsersRepository) {} 
 
-  async execute(id: string, input: UpdateSellerDTO): Promise<UpdatedUserDTO> {
+  async execute(
+    id: string, 
+    input: UpdateSellerDTO,
+    authenticatedUserId: string,
+    authenticatedRole: string
+  ): Promise<UpdatedUserDTO> {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
       throw new InvalidUserOperationError("Usuário não encontrado.");
+    }
+
+    // Seller só pode atualizar próprio perfil, Manager pode atualizar qualquer
+    if (authenticatedRole === "SELLER" && authenticatedUserId !== id) {
+      throw new InvalidUserOperationError("Você não tem permissão para atualizar este perfil.");
     }
     
     const fullName = 
