@@ -12,6 +12,7 @@ import { makeChangeStatusSellerController } from "@/infrastructure/factories/use
 import { makeAuthenticateUserController } from "@/infrastructure/factories/users/make-authenticate-user.js";
 import { makeAuthenticateManagerController } from "@/infrastructure/factories/users/make-authenticate-manager.js";
 import { makeRefreshTokenController } from "@/infrastructure/factories/auth/make-refresh-token.js";
+import { makeGetStudentProfileController } from "@/infrastructure/factories/users/make-get-student-profile.js";
 
 export function registerRoutes(http: HttpServer) {
   registerAuthRoutes(http, {
@@ -22,6 +23,7 @@ export function registerRoutes(http: HttpServer) {
     registerStudent: makeRegisterStudentController(),
     registerSeller: makeRegisterSellerController(),
     getSellerProfile: makeGetSellerProfileController(),
+    getStudentProfile: makeGetStudentProfileController(),
     updateSellerProfile: makeUpdateSellerProfileController(),
     registerPix: makeRegisterPixController(),
     getPix: makeGetKeyPixController(),

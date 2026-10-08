@@ -1,8 +1,8 @@
 import type { RouteSchema } from "@/application/contracts/routeSchema.js";
 
-export const getSellerProfile: RouteSchema = {
-  tags: ["Seller"],
-  summary: "Buscar perfil do seller",
+export const getStudentProfile: RouteSchema = {
+  tags: ["Student"],
+  summary: "Buscar perfil do student",
   params: {
     type: "object",
     required: ["id"],
@@ -16,14 +16,9 @@ export const getSellerProfile: RouteSchema = {
       properties: {
         fullName: { type: "string" },
         username: { type: "string" },
-        cpf: { type: "string" },
         phone: { type: "string" },
-        companyName: { type: "string" },
-        photoKey: { type: "string", nullable: true },
         status: { type: "string" },
         birthDate: { type: "string" },
-        pixKey: { type: "string", nullable: true },
-        
       },
     },
   },

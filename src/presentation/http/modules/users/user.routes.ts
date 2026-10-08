@@ -13,11 +13,13 @@ import { authenticateManagerDoc } from "./docs/authenticate-manager.doc.js";
 import { makeAuthMiddleware } from "@/infrastructure/factories/jwt/make-auth-middleware.js";
 import { RoleMiddleware } from "../../middlewares/role-middleware.js";
 import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
+import { getStudentProfile } from "./docs/get-student-profile.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
   registerSeller: HttpController;
   getSellerProfile: HttpController;
+  getStudentProfile: HttpController
   updateSellerProfile: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
@@ -62,13 +64,21 @@ export function registerUserRoutes(
     controllers.authenticateManager,
     authenticateManagerDoc,
   );
-
+  // Dividir o get seller/profile e um get seller/me
   http.on(
     "GET",
     "/seller/profile/:id",
     controllers.getSellerProfile,
     getSellerProfile,
     requireRoles("SELLER", "MANAGER"),
+  );
+
+  http.on(
+    "GET",
+    "/student/me/:id",
+    controllers.getStudentProfile,
+    getStudentProfile,
+    requireRoles("STUDENT", "MANAGER"),
   );
 
   http.on(
