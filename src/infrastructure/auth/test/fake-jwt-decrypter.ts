@@ -1,7 +1,17 @@
-import { Encrypter } from "@/application/contracts/auth/encrypter.js";
+import { Decrypter } from "@/application/contracts/auth/decrypter.js";
 
-export class FakeDecrypter implements Encrypter {
-  async encrypt(payload: Record<string, unknown>): Promise<string> {
-    return JSON.stringify(payload);
+export class FakeDecrypter implements Decrypter {
+  async decrypt(token: string) {
+    const payload = JSON.parse(token) as {
+      sub: string;
+      role?: string;
+      name?: string;
+    };
+
+    return {
+      sub: payload.sub,
+      role: payload.role,
+      name: payload.name,
+    };
   }
 }

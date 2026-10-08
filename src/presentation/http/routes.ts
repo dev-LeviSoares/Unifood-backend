@@ -1,5 +1,6 @@
 import { HttpServer } from "@/application/contracts/http-server.js";
 import { registerUserRoutes } from "./modules/users/user.routes.js";
+import { registerAuthRoutes } from "./modules/auth/auth.routes.js";
 import { makeRegisterStudentController } from "@/infrastructure/factories/users/make-register-student-controller.js";
 import { makeRegisterSellerController } from "@/infrastructure/factories/users/make-register-seller-controller.js";
 import { makeGetSellerProfileController } from "@/infrastructure/factories/users/make-get-seller-profile.js";
@@ -10,8 +11,13 @@ import { makeDeleteKeyPixController } from "@/infrastructure/factories/users/mak
 import { makeChangeStatusSellerController } from "@/infrastructure/factories/users/make-change-status-seller.js";
 import { makeAuthenticateUserController } from "@/infrastructure/factories/users/make-authenticate-user.js";
 import { makeAuthenticateManagerController } from "@/infrastructure/factories/users/make-authenticate-manager.js";
+import { makeRefreshTokenController } from "@/infrastructure/factories/auth/make-refresh-token.js";
 
 export function registerRoutes(http: HttpServer) {
+  registerAuthRoutes(http, {
+    refreshToken: makeRefreshTokenController(),
+  });
+
   registerUserRoutes(http, {
     registerStudent: makeRegisterStudentController(),
     registerSeller: makeRegisterSellerController(),

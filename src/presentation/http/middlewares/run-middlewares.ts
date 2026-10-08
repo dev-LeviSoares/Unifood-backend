@@ -1,10 +1,12 @@
 import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
 import { HttpRequest, HttpResponse } from "@/application/contracts/http.js";
 
+// Tem status e nao tem params, então é response
 export function isHttpResponse(
   value: HttpRequest | HttpResponse,
 ): value is HttpResponse {
   return "status" in value && !("params" in value);
+  // Operador "in" verifica se uma propriedade existe em um objeto.
 }
 
 export async function runMiddlewares(

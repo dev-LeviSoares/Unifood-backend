@@ -10,8 +10,10 @@ import { Username } from "@/domain/user/value-objects/username.js";
 import { Phone } from "@/domain/user/value-objects/phone.js";
 import { BirthDate } from "@/domain/user/value-objects/birth-date.js";
 import { Cpf } from "@/domain/user/value-objects/cpf.js";
+import { InMemoryRefreshTokensRepository } from "@/infrastructure/database/auth/in-memory-refresh-token-repository.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
+let inMemoryRefreshTokensRepository: InMemoryRefreshTokensRepository;
 let registerSeller: RegisterSellerUseCase;
 let passwordHasher: FakePasswordHasher;
 let sut: AuthenticateManagerUseCase;
@@ -19,6 +21,7 @@ let sut: AuthenticateManagerUseCase;
 describe("Authenticate manager Use Case", () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
+    inMemoryRefreshTokensRepository = new InMemoryRefreshTokensRepository();
     passwordHasher = new FakePasswordHasher();
     registerSeller = new RegisterSellerUseCase(
       inMemoryUsersRepository,
@@ -28,6 +31,8 @@ describe("Authenticate manager Use Case", () => {
       inMemoryUsersRepository,
       passwordHasher,
       new FakeEncrypter(),
+      new FakeEncrypter(),
+      inMemoryRefreshTokensRepository,
     );
   });
 
@@ -49,13 +54,18 @@ describe("Authenticate manager Use Case", () => {
       password: "senha1234",
     });
 
-    expect(result).toEqual(
+    expect(result.accessToken).toBe(
       JSON.stringify({
         sub: manager.id,
         role: "MANAGER",
         name: "Joao Pedro",
       }),
     );
+    expect(JSON.parse(result.refreshToken)).toEqual({
+      sub: manager.id,
+      jti: expect.any(String),
+    });
+    expect(inMemoryRefreshTokensRepository.items).toHaveLength(1);
   });
 
   test("it should not be able to authenticate a seller as manager", async () => {

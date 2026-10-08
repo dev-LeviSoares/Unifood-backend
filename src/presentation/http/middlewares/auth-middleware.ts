@@ -15,8 +15,20 @@ export class AuthMiddleware implements HttpMiddleware {
     const token = header.slice("Bearer ".length);
 
     try {
-      const user = await this.decrypter.decrypt(token);
-      return { ...request, user };
+      const payload = await this.decrypter.decrypt(token);
+
+      if (!payload.role || !payload.name) {
+        return { status: 401, body: { message: "Token inválido." } };
+      }
+
+      return {
+        ...request,
+        user: {
+          sub: payload.sub,
+          role: payload.role,
+          name: payload.name,
+        },
+      };
     } catch {
       return { status: 401, body: { message: "Token inválido." } };
     }

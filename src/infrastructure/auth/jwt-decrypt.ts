@@ -1,5 +1,5 @@
 import { Decrypter } from "@/application/contracts/auth/decrypter.js";
-import jwt, { type SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export class JwtDecrypt implements Decrypter {
   constructor(
@@ -7,18 +7,16 @@ export class JwtDecrypt implements Decrypter {
   ) {}
 
   async decrypt(token: string) {
-    const payload = jwt.verify(
-      token, this.secret
-    ) as {
+    const payload = jwt.verify(token, this.secret) as {
       sub: string;
-      role: "STUDENT" | "SELLER" | "MANAGER";
-      name: string;
+      role?: "STUDENT" | "SELLER" | "MANAGER";
+      name?: string;
     };
 
     return {
       sub: payload.sub,
       role: payload.role,
-      name: payload.name
-    }
+      name: payload.name,
+    };
   }
 }

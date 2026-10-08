@@ -22,14 +22,14 @@ export class AuthenticateManagerController implements HttpController {
       }
     }
 
-    const accessToken = await this.authenticateUser.execute({
+    const { accessToken, refreshToken} = await this.authenticateUser.execute({
       cpf: body.data.cpf, 
       password: body.data.password
     });
 
     return { 
       status: 200, 
-      body: { accessToken }
+      body: { accessToken, refreshToken }
     };
   }
 }

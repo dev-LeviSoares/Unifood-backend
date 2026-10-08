@@ -12,6 +12,7 @@ import { authenticateUserDoc } from "./docs/authenticate-user.doc.js";
 import { authenticateManagerDoc } from "./docs/authenticate-manager.doc.js";
 import { makeAuthMiddleware } from "@/infrastructure/factories/jwt/make-auth-middleware.js";
 import { RoleMiddleware } from "../../middlewares/role-middleware.js";
+import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -26,7 +27,9 @@ interface UserControllers {
   authenticateManager: HttpController;
 }
 
-const auth = makeAuthMiddleware();
+function requireRoles(...roles: Array<"SELLER" | "MANAGER" | "STUDENT">): HttpMiddleware[] {
+  return [makeAuthMiddleware(), new RoleMiddleware(roles)];
+}
 
 export function registerUserRoutes(
   http: HttpServer,
@@ -65,7 +68,7 @@ export function registerUserRoutes(
     "/seller/profile/:id",
     controllers.getSellerProfile,
     getSellerProfile,
-    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+    requireRoles("SELLER", "MANAGER"),
   );
 
   http.on(
@@ -73,7 +76,7 @@ export function registerUserRoutes(
     "/seller/profile/:id",
     controllers.updateSellerProfile,
     updateSellerProfileDoc,
-    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+    requireRoles("SELLER", "MANAGER"),
   );
 
   http.on(
@@ -81,20 +84,17 @@ export function registerUserRoutes(
     "/seller/status/:id",
     controllers.changeStatusSeller,
     changeStatusSellerDoc,
-    [auth, new RoleMiddleware(["MANAGER"])],
+    requireRoles("MANAGER"),
   );
 
-  http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey, [
-    auth,
-    new RoleMiddleware(["SELLER", "MANAGER"]),
-  ]);
+  http.on("GET", "/seller/pix-key/:id", controllers.getPix, getPixKey, requireRoles("SELLER", "MANAGER"));
 
   http.on(
     "PUT",
     "/seller/pix-key/:id",
     controllers.registerPix,
     registerPixDoc,
-    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+    requireRoles("SELLER", "MANAGER"),
   );
 
   http.on(
@@ -102,6 +102,6 @@ export function registerUserRoutes(
     "/seller/pix-key/:id",
     controllers.deletePix,
     deletePixKey,
-    [auth, new RoleMiddleware(["SELLER", "MANAGER"])],
+    requireRoles("SELLER", "MANAGER"),
   );
 }

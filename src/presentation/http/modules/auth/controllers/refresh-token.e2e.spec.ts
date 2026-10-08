@@ -1,7 +1,7 @@
 import { createHttpServer } from "@/app.js";
 
-describe("POST /auth/login/", () => {
-  it("should return the access token of the user", async () => {
+describe("POST /auth/refresh", () => {
+  it("should return a new access and refresh token pair", async () => {
     const http = await createHttpServer();
 
     await http.inject({
@@ -21,13 +21,26 @@ describe("POST /auth/login/", () => {
       },
     });
 
-    const response = await http.inject({
+    const loginResponse = await http.inject({
       method: "POST",
-      path: `/auth/login`,
+      path: "/auth/login",
       payload: {
         username: "joao_pedro",
-        password: "senha1234"
-      }
+        password: "senha1234",
+      },
+    });
+
+    const { refreshToken } = loginResponse.body as {
+      accessToken: string;
+      refreshToken: string;
+    };
+
+    const response = await http.inject({
+      method: "POST",
+      path: "/auth/refresh",
+      payload: {
+        refreshToken,
+      },
     });
 
     expect(response.status).toBe(200);
@@ -35,5 +48,8 @@ describe("POST /auth/login/", () => {
       accessToken: expect.any(String),
       refreshToken: expect.any(String),
     });
+    expect((response.body as { refreshToken: string }).refreshToken).not.toBe(
+      refreshToken,
+    );
   });
 });

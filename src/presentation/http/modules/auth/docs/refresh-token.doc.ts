@@ -1,14 +1,13 @@
 import type { RouteSchema } from "@/application/contracts/routeSchema.js";
 
-export const authenticateUserDoc: RouteSchema = {
+export const refreshTokenDoc: RouteSchema = {
   tags: ["Auth"],
-  summary: "Autenticar usuário",
+  summary: "Renovar access token com refresh token",
   body: {
     type: "object",
-    required: ["username", "password"],
+    required: ["refreshToken"],
     properties: {
-      username: { type: "string" },
-      password: { type: "string" },
+      refreshToken: { type: "string" },
     },
   },
   response: {

@@ -4,14 +4,17 @@ import { RegisterSellerUseCase } from "../register-seller.js";
 import { AuthenticateUserUseCase } from "../authenticate-user.js";
 import { FakeEncrypter } from "@/infrastructure/auth/test/fake-jwt-encrypter.js";
 import { InvalidCredentialsError } from "@/domain/user/errors/invalid-credentials-error.js";
+import { InMemoryRefreshTokensRepository } from "@/infrastructure/database/auth/in-memory-refresh-token-repository.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
+let inMemoryRefreshTokensRepository: InMemoryRefreshTokensRepository;
 let registerSeller: RegisterSellerUseCase;
 let sut: AuthenticateUserUseCase;
 
 describe("Authenticate user Use Case", () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
+    inMemoryRefreshTokensRepository = new InMemoryRefreshTokensRepository();
     registerSeller = new RegisterSellerUseCase(
       inMemoryUsersRepository,
       new FakePasswordHasher(),
@@ -20,6 +23,8 @@ describe("Authenticate user Use Case", () => {
       inMemoryUsersRepository,
       new FakePasswordHasher(),
       new FakeEncrypter(),
+      new FakeEncrypter(),
+      inMemoryRefreshTokensRepository,
     );
   });
 
@@ -42,13 +47,18 @@ describe("Authenticate user Use Case", () => {
       password: "senha1234",
     });
 
-    expect(result).toEqual(
+    expect(result.accessToken).toBe(
       JSON.stringify({
         sub: seller.id,
         role: "SELLER",
         name: "Joao Pedro",
       }),
     );
+    expect(JSON.parse(result.refreshToken)).toEqual({
+      sub: seller.id,
+      jti: expect.any(String),
+    });
+    expect(inMemoryRefreshTokensRepository.items).toHaveLength(1);
   });
 
   test("it should not be able to authenticate another user that does not exist", async () => {

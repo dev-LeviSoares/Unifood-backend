@@ -33,6 +33,7 @@ describe("POST /auth/login/manager", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       accessToken: expect.any(String),
+      refreshToken: expect.any(String),
     });
   });
 });

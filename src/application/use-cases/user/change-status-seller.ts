@@ -1,4 +1,5 @@
 import { ChangeStatusSellerDTO } from "@/application/dtos/user/change-status-seller.dto.js";
+import { Role } from "@/domain/user/enum/role.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
 import { UsersRepository } from "@/domain/user/repository/users-repository.js";
 
