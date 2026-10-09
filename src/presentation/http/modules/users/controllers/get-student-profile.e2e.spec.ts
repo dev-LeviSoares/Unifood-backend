@@ -1,6 +1,6 @@
 import { createHttpServer } from "@/app.js";
 
-describe("GET /student/me/:id", () => {
+describe("GET /student/profile/:id", () => {
   it("should return the student profile", async () => {
     const http = await createHttpServer();
 
@@ -33,7 +33,7 @@ describe("GET /student/me/:id", () => {
 
     const response = await http.inject({
       method: "GET",
-      path: `/student/me/${id}`,
+      path: `/student/profile/${id}`,
       headers: {
         authorization: `Bearer ${accessToken}`,
       },

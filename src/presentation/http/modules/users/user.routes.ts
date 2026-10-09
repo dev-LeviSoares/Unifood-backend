@@ -14,12 +14,14 @@ import { makeAuthMiddleware } from "@/infrastructure/factories/jwt/make-auth-mid
 import { RoleMiddleware } from "../../middlewares/role-middleware.js";
 import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
 import { getStudentProfile } from "./docs/get-student-profile.doc.js";
+import { getManagerProfile } from "./docs/get-manager-profile.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
   registerSeller: HttpController;
   getSellerProfile: HttpController;
   getStudentProfile: HttpController
+  getManagerProfile: HttpController
   updateSellerProfile: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
@@ -75,10 +77,18 @@ export function registerUserRoutes(
 
   http.on(
     "GET",
-    "/student/me/:id",
+    "/student/profile/:id",
     controllers.getStudentProfile,
     getStudentProfile,
     requireRoles("STUDENT", "MANAGER"),
+  );
+
+  http.on(
+    "GET",
+    "/manager/profile/:id",
+    controllers.getManagerProfile,
+    getManagerProfile,
+    requireRoles("MANAGER"),
   );
 
   http.on(
