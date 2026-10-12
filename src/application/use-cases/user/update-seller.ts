@@ -10,7 +10,7 @@ import { Phone } from "@/domain/user/value-objects/phone.js";
 import { Photo } from "@/domain/user/value-objects/photo.js";
 import { Username } from "@/domain/user/value-objects/username.js";
 
-export class UpdateSellerProfile {
+export class UpdateSellerProfileUseCase {
   constructor(private readonly usersRepository: UsersRepository) {} 
 
   async execute(

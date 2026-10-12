@@ -2,12 +2,13 @@ import { InMemoryUsersRepository } from "@/infrastructure/database/user/in-memor
 import { FakePasswordHasher } from "@/infrastructure/cryptography/fake-password-hasher.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
 import { RegisterSellerUseCase } from "../register-seller.js";
-import { UpdateSellerProfile } from "../update-seller.js";
+import { UpdateSellerProfileUseCase } from "../update-seller.js";
 import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
+import { Role } from "@/domain/user/enum/role.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let registerSeller: RegisterSellerUseCase;
-let sut: UpdateSellerProfile;
+let sut: UpdateSellerProfileUseCase;
 
 describe("Update Seller Profile Use Case", () => {
   beforeEach(() => {
@@ -16,7 +17,7 @@ describe("Update Seller Profile Use Case", () => {
       inMemoryUsersRepository,
       new FakePasswordHasher(),
     );
-    sut = new UpdateSellerProfile(inMemoryUsersRepository);
+    sut = new UpdateSellerProfileUseCase(inMemoryUsersRepository);
   });
 
   test("it should be able to update seller profile", async () => {
@@ -33,12 +34,17 @@ describe("Update Seller Profile Use Case", () => {
       pixKey: "joao.pedro@email.com",
     });
 
-    const result = await sut.execute(seller.id, {
-      firstName: "Gabriel",
-      lastName: "Lucas",
-      username: "gabriel_lucas",
-      companyName: "Updated Company name"
-    });
+    const result = await sut.execute(
+      seller.id,
+      {
+        firstName: "Gabriel",
+        lastName: "Lucas",
+        username: "gabriel_lucas",
+        companyName: "Updated Company name",
+      },
+      seller.id,
+      Role.SELLER,
+    );
 
     expect(result).toEqual({
       firstName: "Gabriel",
@@ -54,14 +60,18 @@ describe("Update Seller Profile Use Case", () => {
     });
   });
 
-  test("it should not be able to update another a seller that does not exist", async () => {
+  test("it should not be able to update a seller that does not exist", async () => {
     await expect(
-      sut.execute("f81d4fae-7dec-11d0-a765-00a0c91e6bf6", { username: "test" }),
+      sut.execute(
+        "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+        { username: "test" },
+        "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+        Role.SELLER,
+      ),
     ).rejects.toBeInstanceOf(InvalidUserOperationError);
   });
 
   test("it should not be able to update a seller with same username", async () => {
-
     await registerSeller.execute({
       firstName: "Joao",
       lastName: "Pedro",
@@ -89,9 +99,12 @@ describe("Update Seller Profile Use Case", () => {
     });
 
     await expect(
-      sut.execute(seller.id, {
-        username: "jp1",
-      })
+      sut.execute(
+        seller.id,
+        { username: "jp1" },
+        seller.id,
+        Role.SELLER,
+      ),
     ).rejects.toBeInstanceOf(UsernameAlreadyTakenError);
   });
 });

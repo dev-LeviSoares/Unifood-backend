@@ -15,6 +15,7 @@ import { RoleMiddleware } from "../../middlewares/role-middleware.js";
 import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
 import { getStudentProfile } from "./docs/get-student-profile.doc.js";
 import { getManagerProfile } from "./docs/get-manager-profile.doc.js";
+import { updateStudentProfileDoc } from "./docs/update-student-profile.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -23,6 +24,7 @@ interface UserControllers {
   getStudentProfile: HttpController
   getManagerProfile: HttpController
   updateSellerProfile: HttpController;
+  updateStudentProfile: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
   deletePix: HttpController;
@@ -97,6 +99,14 @@ export function registerUserRoutes(
     controllers.updateSellerProfile,
     updateSellerProfileDoc,
     requireRoles("SELLER", "MANAGER"),
+  );
+
+  http.on(
+    "PATCH",
+    "/student/profile/:id",
+    controllers.updateStudentProfile,
+    updateStudentProfileDoc,
+    requireRoles("STUDENT", "MANAGER"),
   );
 
   http.on(

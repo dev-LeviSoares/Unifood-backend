@@ -46,7 +46,7 @@ describe("PATCH /seller/profile/:id", () => {
       },
     });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toEqual({
       firstName: "Joao",
       lastName: "Pedro",
