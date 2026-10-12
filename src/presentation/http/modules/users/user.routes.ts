@@ -16,6 +16,7 @@ import { HttpMiddleware } from "@/application/contracts/http-middleware.js";
 import { getStudentProfile } from "./docs/get-student-profile.doc.js";
 import { getManagerProfile } from "./docs/get-manager-profile.doc.js";
 import { updateStudentProfileDoc } from "./docs/update-student-profile.doc.js";
+import { updateManagerProfileDoc } from "./docs/update-manager-profile.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -25,6 +26,7 @@ interface UserControllers {
   getManagerProfile: HttpController
   updateSellerProfile: HttpController;
   updateStudentProfile: HttpController;
+  updateManagerProfile: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
   deletePix: HttpController;
@@ -68,7 +70,7 @@ export function registerUserRoutes(
     controllers.authenticateManager,
     authenticateManagerDoc,
   );
-  // Dividir o get seller/profile e um get seller/me
+
   http.on(
     "GET",
     "/seller/profile/:id",
@@ -107,6 +109,14 @@ export function registerUserRoutes(
     controllers.updateStudentProfile,
     updateStudentProfileDoc,
     requireRoles("STUDENT", "MANAGER"),
+  );
+
+  http.on(
+    "PATCH",
+    "/manager/profile/:id",
+    controllers.updateManagerProfile,
+    updateManagerProfileDoc,
+    requireRoles("MANAGER"),
   );
 
   http.on(
