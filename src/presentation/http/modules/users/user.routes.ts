@@ -17,6 +17,8 @@ import { getStudentProfile } from "./docs/get-student-profile.doc.js";
 import { getManagerProfile } from "./docs/get-manager-profile.doc.js";
 import { updateStudentProfileDoc } from "./docs/update-student-profile.doc.js";
 import { updateManagerProfileDoc } from "./docs/update-manager-profile.doc.js";
+import { deleteStudentDoc } from "./docs/delete-student.doc.js";
+import { deleteSellerDoc } from "./docs/delete-seller.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -27,6 +29,8 @@ interface UserControllers {
   updateSellerProfile: HttpController;
   updateStudentProfile: HttpController;
   updateManagerProfile: HttpController;
+  deleteStudent: HttpController;
+  deleteSeller: HttpController;
   registerPix: HttpController;
   getPix: HttpController;
   deletePix: HttpController;
@@ -117,6 +121,22 @@ export function registerUserRoutes(
     controllers.updateManagerProfile,
     updateManagerProfileDoc,
     requireRoles("MANAGER"),
+  );
+
+  http.on(
+    "DELETE",
+    "/student/profile/:id",
+    controllers.deleteStudent,
+    deleteStudentDoc,
+    requireRoles("STUDENT", "MANAGER"),
+  );
+
+  http.on(
+    "DELETE",
+    "/seller/profile/:id",
+    controllers.deleteSeller,
+    deleteSellerDoc,
+    requireRoles("SELLER", "MANAGER"),
   );
 
   http.on(

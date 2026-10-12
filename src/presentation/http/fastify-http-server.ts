@@ -65,9 +65,11 @@ export class FastifyHttpServer implements HttpServer {
       headers: input.headers,
     });
   
+    const rawBody = response.body;
+
     return {
       status: response.statusCode,
-      body: response.json(),
+      body: rawBody ? response.json() : null,
     };
   }
 
