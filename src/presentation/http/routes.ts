@@ -18,6 +18,8 @@ import { makeUpdateStudentProfileController } from "@/infrastructure/factories/u
 import { makeUpdateManagerProfileController } from "@/infrastructure/factories/users/make-update-manager-profile.js";
 import { makeDeleteStudentController } from "@/infrastructure/factories/users/make-delete-student.js";
 import { makeDeleteSellerController } from "@/infrastructure/factories/users/make-delete-seller.js";
+import { makeRegisterSellerPhotoController } from "@/infrastructure/factories/users/make-register-seller-photo.js";
+import { makeDeleteSellerPhotoController } from "@/infrastructure/factories/users/make-delete-seller-photo.js";
 
 export function registerRoutes(http: HttpServer) {
   registerAuthRoutes(http, {
@@ -38,6 +40,8 @@ export function registerRoutes(http: HttpServer) {
     registerPix: makeRegisterPixController(),
     getPix: makeGetKeyPixController(),
     deletePix: makeDeleteKeyPixController(),
+    registerSellerPhoto: makeRegisterSellerPhotoController(),
+    deleteSellerPhoto: makeDeleteSellerPhotoController(),
     changeStatusSeller: makeChangeStatusSellerController(),
     authenticateUser: makeAuthenticateUserController(),
     authenticateManager: makeAuthenticateManagerController(),

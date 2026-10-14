@@ -19,6 +19,8 @@ import { updateStudentProfileDoc } from "./docs/update-student-profile.doc.js";
 import { updateManagerProfileDoc } from "./docs/update-manager-profile.doc.js";
 import { deleteStudentDoc } from "./docs/delete-student.doc.js";
 import { deleteSellerDoc } from "./docs/delete-seller.doc.js";
+import { registerSellerPhotoDoc } from "./docs/register-seller-photo.doc.js";
+import { deleteSellerPhotoDoc } from "./docs/delete-seller-photo.doc.js";
 
 interface UserControllers {
   registerStudent: HttpController;
@@ -34,6 +36,8 @@ interface UserControllers {
   registerPix: HttpController;
   getPix: HttpController;
   deletePix: HttpController;
+  registerSellerPhoto: HttpController;
+  deleteSellerPhoto: HttpController;
   changeStatusSeller: HttpController;
   authenticateUser: HttpController;
   authenticateManager: HttpController;
@@ -163,5 +167,21 @@ export function registerUserRoutes(
     controllers.deletePix,
     deletePixKey,
     requireRoles("SELLER", "MANAGER"),
+  );
+
+  http.on(
+    "POST",
+    "/seller/me/photo",
+    controllers.registerSellerPhoto,
+    registerSellerPhotoDoc,
+    requireRoles("SELLER"),
+  );
+
+  http.on(
+    "DELETE",
+    "/seller/me/photo",
+    controllers.deleteSellerPhoto,
+    deleteSellerPhotoDoc,
+    requireRoles("SELLER"),
   );
 }
