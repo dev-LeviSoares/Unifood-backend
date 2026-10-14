@@ -22,7 +22,11 @@ export class DeletePixKeyController implements HttpController {
       }
     }
 
-    await this.deletePixKeySeller.execute(parsed.data?.id);
+    await this.deletePixKeySeller.execute(
+      parsed.data?.id,
+      request.user?.sub,
+      request.user?.role
+    );
 
     return { 
       status: 201, 

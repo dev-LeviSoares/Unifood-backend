@@ -52,4 +52,12 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
     user.setPixKey(new PixKey(pix));
   }
+
+  async delete(id: string): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === id);
+
+    if (index >= 0) {
+      this.items.splice(index, 1);
+    }
+  }
 }

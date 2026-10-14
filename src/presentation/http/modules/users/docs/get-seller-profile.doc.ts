@@ -11,7 +11,7 @@ export const getSellerProfile: RouteSchema = {
     },
   },
   response: {
-    201: { 
+    200: { 
       type: "object", 
       properties: {
         fullName: { type: "string" },

@@ -1,5 +1,6 @@
 import { HttpServer } from "@/application/contracts/http-server.js";
 import { registerUserRoutes } from "./modules/users/user.routes.js";
+import { registerAuthRoutes } from "./modules/auth/auth.routes.js";
 import { makeRegisterStudentController } from "@/infrastructure/factories/users/make-register-student-controller.js";
 import { makeRegisterSellerController } from "@/infrastructure/factories/users/make-register-seller-controller.js";
 import { makeGetSellerProfileController } from "@/infrastructure/factories/users/make-get-seller-profile.js";
@@ -10,16 +11,37 @@ import { makeDeleteKeyPixController } from "@/infrastructure/factories/users/mak
 import { makeChangeStatusSellerController } from "@/infrastructure/factories/users/make-change-status-seller.js";
 import { makeAuthenticateUserController } from "@/infrastructure/factories/users/make-authenticate-user.js";
 import { makeAuthenticateManagerController } from "@/infrastructure/factories/users/make-authenticate-manager.js";
+import { makeRefreshTokenController } from "@/infrastructure/factories/auth/make-refresh-token.js";
+import { makeGetStudentProfileController } from "@/infrastructure/factories/users/make-get-student-profile.js";
+import { makeGetManagerProfileController } from "@/infrastructure/factories/users/make-get-manager-profile.js";
+import { makeUpdateStudentProfileController } from "@/infrastructure/factories/users/make-update-student-profile.js";
+import { makeUpdateManagerProfileController } from "@/infrastructure/factories/users/make-update-manager-profile.js";
+import { makeDeleteStudentController } from "@/infrastructure/factories/users/make-delete-student.js";
+import { makeDeleteSellerController } from "@/infrastructure/factories/users/make-delete-seller.js";
+import { makeRegisterSellerPhotoController } from "@/infrastructure/factories/users/make-register-seller-photo.js";
+import { makeDeleteSellerPhotoController } from "@/infrastructure/factories/users/make-delete-seller-photo.js";
 
 export function registerRoutes(http: HttpServer) {
+  registerAuthRoutes(http, {
+    refreshToken: makeRefreshTokenController(),
+  });
+
   registerUserRoutes(http, {
     registerStudent: makeRegisterStudentController(),
     registerSeller: makeRegisterSellerController(),
     getSellerProfile: makeGetSellerProfileController(),
+    getStudentProfile: makeGetStudentProfileController(),
+    getManagerProfile: makeGetManagerProfileController(),
     updateSellerProfile: makeUpdateSellerProfileController(),
+    updateStudentProfile: makeUpdateStudentProfileController(),
+    updateManagerProfile: makeUpdateManagerProfileController(),
+    deleteStudent: makeDeleteStudentController(),
+    deleteSeller: makeDeleteSellerController(),
     registerPix: makeRegisterPixController(),
     getPix: makeGetKeyPixController(),
     deletePix: makeDeleteKeyPixController(),
+    registerSellerPhoto: makeRegisterSellerPhotoController(),
+    deleteSellerPhoto: makeDeleteSellerPhotoController(),
     changeStatusSeller: makeChangeStatusSellerController(),
     authenticateUser: makeAuthenticateUserController(),
     authenticateManager: makeAuthenticateManagerController(),

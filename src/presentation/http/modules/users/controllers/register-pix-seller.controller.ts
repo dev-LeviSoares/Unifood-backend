@@ -27,7 +27,9 @@ export class RegisterPixController implements HttpController {
 
     const pix = await this.registerPixSeller.execute(
       params.data?.id,
-      body.data.pix 
+      body.data.pix,
+      request.user?.sub,
+      request.user?.role
     );
 
     return { 

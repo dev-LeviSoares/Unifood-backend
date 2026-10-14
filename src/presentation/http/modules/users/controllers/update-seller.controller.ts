@@ -4,12 +4,11 @@ import {
   HttpResponse,
 } from "@/application/contracts/http.js";
 import { uuidSchema } from "../../shared/schema/get-uuid.schema.js";
-import { UpdateSellerProfile } from "@/application/use-cases/user/update-seller.js";
+import { UpdateSellerProfileUseCase } from "@/application/use-cases/user/update-seller.js";
 import { updateSellerSchema } from "../schemas/update-seller.schema.js";
 
-
 export class UpdateSellerController implements HttpController {
-  constructor(private readonly updateSellerProfile: UpdateSellerProfile) {}
+  constructor(private readonly updateSellerProfile: UpdateSellerProfileUseCase) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     const params = uuidSchema.safeParse(request.params);
@@ -25,10 +24,15 @@ export class UpdateSellerController implements HttpController {
       }
     }
 
-    const user = await this.updateSellerProfile.execute(params.data?.id, body.data );
+    const user = await this.updateSellerProfile.execute(
+      params.data?.id, 
+      body.data,
+      request.user?.sub || "",
+      request.user?.role || ""
+    );
 
     return { 
-      status: 200, 
+      status: 201, 
       body: user
     };
   }

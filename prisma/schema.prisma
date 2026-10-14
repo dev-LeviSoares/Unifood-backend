@@ -58,8 +58,23 @@ model User {
   products        Product[]
   ordersAsStudent Order[]   @relation("StudentOrders")
   ordersAsSeller  Order[]   @relation("SellerOrders")
+  refreshTokens   RefreshToken[]
 
   @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
 }
 
 model Product {

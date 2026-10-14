@@ -22,7 +22,11 @@ export class GetPixKeyController implements HttpController {
       }
     }
 
-    const pix = await this.getPixSeller.execute(parsed.data?.id);
+    const pix = await this.getPixSeller.execute(
+      parsed.data?.id,
+      request.user?.sub,
+      request.user?.role
+    );
 
     return { 
       status: 200, 

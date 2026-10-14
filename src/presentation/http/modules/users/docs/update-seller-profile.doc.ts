@@ -13,16 +13,16 @@ export const updateSellerProfileDoc: RouteSchema = {
   body: {
     type: "object",
     properties: {
-      firstName: { type: "string" },
-      lastName: { type: "string" },
-      username: { type: "string" },
-      phone: { type: "string" },
-      birthDate: { type: "string" },
-      companyName: { type: "string" },
+      firstName: { type: "string", nullable: true },
+      lastName: { type: "string", nullable: true },
+      username: { type: "string", nullable: true },
+      phone: { type: "string", nullable: true },
+      birthDate: { type: "string", nullable: true },
+      companyName: { type: "string", nullable: true },
       photoKey: { type: "string", nullable: true },
     },
   },
   response: {
-    200: { type: "object", additionalProperties: true },
+    201: { type: "object", additionalProperties: true },
   },
 }

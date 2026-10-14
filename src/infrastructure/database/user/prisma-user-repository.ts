@@ -116,4 +116,28 @@ export class PrismaUsersRepository implements UsersRepository{
     });
   }
 
+  async delete(id: string): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.order.deleteMany({
+        where: {
+          OR: [{ studentId: id }, { sellerId: id }],
+        },
+      });
+
+      await tx.orderItem.deleteMany({
+        where: {
+          product: { sellerId: id },
+        },
+      });
+
+      await tx.product.deleteMany({
+        where: { sellerId: id },
+      });
+
+      await tx.user.delete({
+        where: { id },
+      });
+    });
+  }
+
 }

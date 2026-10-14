@@ -164,6 +164,18 @@ export class User {
     this.props.pixKey = null;
     this.touch();
   }
+
+  setPhoto(photo: Photo): void {
+    this.assertRole(Role.SELLER);
+    this.props.photo = photo;
+    this.touch();
+  }
+
+  deletePhoto(): void {
+    this.assertRole(Role.SELLER);
+    this.props.photo = null;
+    this.touch();
+  }
   
   approve(): void {
     this.assertRole(Role.SELLER);

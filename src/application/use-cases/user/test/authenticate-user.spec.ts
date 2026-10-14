@@ -2,24 +2,29 @@ import { InMemoryUsersRepository } from "@/infrastructure/database/user/in-memor
 import { FakePasswordHasher } from "@/infrastructure/cryptography/fake-password-hasher.js";
 import { RegisterSellerUseCase } from "../register-seller.js";
 import { AuthenticateUserUseCase } from "../authenticate-user.js";
-import { FakeEncrypter } from "@/infrastructure/cryptography/fake-jwt-encrypter.js";
+import { FakeEncrypter } from "@/infrastructure/auth/test/fake-jwt-encrypter.js";
 import { InvalidCredentialsError } from "@/domain/user/errors/invalid-credentials-error.js";
+import { InMemoryRefreshTokensRepository } from "@/infrastructure/database/auth/in-memory-refresh-token-repository.js";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
-let registerSeller: RegisterSellerUseCase
+let inMemoryRefreshTokensRepository: InMemoryRefreshTokensRepository;
+let registerSeller: RegisterSellerUseCase;
 let sut: AuthenticateUserUseCase;
 
-describe("Change status a seller Use Case", () => {
+describe("Authenticate user Use Case", () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
+    inMemoryRefreshTokensRepository = new InMemoryRefreshTokensRepository();
     registerSeller = new RegisterSellerUseCase(
       inMemoryUsersRepository,
       new FakePasswordHasher(),
     );
     sut = new AuthenticateUserUseCase(
-      inMemoryUsersRepository, 
-      new FakePasswordHasher(), 
-      new FakeEncrypter()
+      inMemoryUsersRepository,
+      new FakePasswordHasher(),
+      new FakeEncrypter(),
+      new FakeEncrypter(),
+      inMemoryRefreshTokensRepository,
     );
   });
 
@@ -37,15 +42,28 @@ describe("Change status a seller Use Case", () => {
       pixKey: "joao.pedro@email.com",
     });
 
-    const result = await sut.execute({ username:"joao_pedro", password: "senha1234"});
+    const result = await sut.execute({
+      username: "joao_pedro",
+      password: "senha1234",
+    });
 
-    expect(result).toEqual(JSON.stringify({ sub: seller.id }));
+    expect(result.accessToken).toBe(
+      JSON.stringify({
+        sub: seller.id,
+        role: "SELLER",
+        name: "Joao Pedro",
+      }),
+    );
+    expect(JSON.parse(result.refreshToken)).toEqual({
+      sub: seller.id,
+      jti: expect.any(String),
+    });
+    expect(inMemoryRefreshTokensRepository.items).toHaveLength(1);
   });
 
   test("it should not be able to authenticate another user that does not exist", async () => {
     await expect(
-      sut.execute({ username:"joao_pedro", password: "senha1234"}),
+      sut.execute({ username: "joao_pedro", password: "senha1234" }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
-
 });

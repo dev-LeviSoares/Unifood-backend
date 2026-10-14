@@ -16,6 +16,7 @@ export const authenticateUserDoc: RouteSchema = {
       type: "object",
       properties: {
         accessToken: { type: "string" },
+        refreshToken: { type: "string" },
       },
     },
   },

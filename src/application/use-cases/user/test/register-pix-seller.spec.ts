@@ -2,8 +2,6 @@ import { InMemoryUsersRepository } from "@/infrastructure/database/user/in-memor
 import { FakePasswordHasher } from "@/infrastructure/cryptography/fake-password-hasher.js";
 import { InvalidUserOperationError } from "@/domain/user/errors/invalid-user-operation-error.js";
 import { RegisterSellerUseCase } from "../register-seller.js";
-import { UpdateSellerProfile } from "../update-seller.js";
-import { UsernameAlreadyTakenError } from "@/domain/user/errors/username-alerady-taken-error.js";
 import { RegisterPixKeySeller } from "../register-pix-seller.js";
 import { PixKeyAlreadyTakenError } from "@/domain/user/errors/pix-key-already-taken-error.js";
 

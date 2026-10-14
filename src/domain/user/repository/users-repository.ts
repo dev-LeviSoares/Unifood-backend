@@ -9,4 +9,5 @@ export interface UsersRepository {
   create(user: User): Promise<void>;
   save(id: string, user: User): Promise<void>;
   savePixKey(id: string, pix: string | null): Promise<void>;
+  delete(id: string): Promise<void>;
 }
